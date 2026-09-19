@@ -1,258 +1,718 @@
 {
-  "fetched_at": "2026-09-19T10:38:43.941951+00:00",
+  "fetched_at": "2026-09-19T12:44:11.611283+00:00",
   "source": "CelesTrak SOCRATES Plus",
   "url": "https://celestrak.org/SOCRATES/table-socrates.php?CATNR=25544",
-  "count": 25,
+  "count": 71,
   "events": [
     {
-      "tca_utc": "2026-09-18 10:48:07.806",
-      "min_range_km": "0.125",
+      "tca_utc": "2026-09-18 23:08:42.007",
+      "min_range_km": "0.076",
       "rel_speed_km_s": "0.000",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-18 12:21:01.672",
-      "min_range_km": "0.161",
+      "tca_utc": "2026-09-18 23:50:56.200",
+      "min_range_km": "0.064",
       "rel_speed_km_s": "0.000",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-18 13:53:52.915",
-      "min_range_km": "0.200",
+      "tca_utc": "2026-09-19 00:40:54.799",
+      "min_range_km": "0.057",
       "rel_speed_km_s": "0.000",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-18 15:26:42.441",
-      "min_range_km": "0.240",
+      "tca_utc": "2026-09-19 01:24:19.971",
+      "min_range_km": "0.044",
       "rel_speed_km_s": "0.000",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-18 16:59:30.627",
-      "min_range_km": "0.283",
+      "tca_utc": "2026-09-19 02:13:04.327",
+      "min_range_km": "0.037",
       "rel_speed_km_s": "0.000",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-18 18:32:17.824",
-      "min_range_km": "0.327",
+      "tca_utc": "2026-09-19 02:57:44.811",
+      "min_range_km": "0.023",
       "rel_speed_km_s": "0.000",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-18 20:05:04.421",
-      "min_range_km": "0.373",
+      "tca_utc": "2026-09-19 03:45:10.599",
+      "min_range_km": "0.018",
       "rel_speed_km_s": "0.000",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-18 21:37:50.474",
-      "min_range_km": "0.422",
+      "tca_utc": "2026-09-19 04:31:10.666",
+      "min_range_km": "0.006",
       "rel_speed_km_s": "0.000",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-18 23:10:36.031",
-      "min_range_km": "0.472",
+      "tca_utc": "2026-09-19 05:17:13.525",
+      "min_range_km": "0.014",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 06:04:37.533",
+      "min_range_km": "0.026",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 06:49:13.005",
+      "min_range_km": "0.035",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 07:38:05.360",
+      "min_range_km": "0.051",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 08:21:08.825",
+      "min_range_km": "0.060",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 09:11:34.158",
+      "min_range_km": "0.078",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 09:53:00.579",
+      "min_range_km": "0.087",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 10:45:03.846",
+      "min_range_km": "0.107",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 11:24:47.793",
+      "min_range_km": "0.116",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 12:18:34.366",
+      "min_range_km": "0.137",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 12:56:29.497",
+      "min_range_km": "0.146",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 13:52:05.704",
+      "min_range_km": "0.169",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 14:28:04.422",
+      "min_range_km": "0.177",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 15:25:37.619",
+      "min_range_km": "0.202",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 15:59:30.015",
+      "min_range_km": "0.210",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 16:59:10.055",
+      "min_range_km": "0.237",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 17:30:41.480",
+      "min_range_km": "0.244",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 18:32:42.809",
+      "min_range_km": "0.273",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 19:01:24.382",
+      "min_range_km": "0.280",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 20:06:15.682",
+      "min_range_km": "0.310",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 21:39:48.319",
+      "min_range_km": "0.349",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-19 23:13:20.181",
+      "min_range_km": "0.389",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-20 00:46:51.224",
+      "min_range_km": "0.431",
+      "rel_speed_km_s": "0.000",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-20 02:20:20.348",
+      "min_range_km": "0.475",
       "rel_speed_km_s": "0.001",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-19 00:43:21.277",
-      "min_range_km": "0.525",
+      "tca_utc": "2026-09-20 03:53:47.694",
+      "min_range_km": "0.519",
       "rel_speed_km_s": "0.001",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-19 02:16:06.352",
-      "min_range_km": "0.579",
+      "tca_utc": "2026-09-20 04:36:52.730",
+      "min_range_km": "2.335",
+      "rel_speed_km_s": "11.069",
+      "iss_norad": "25544",
+      "other_norad": "40701",
+      "other_name": "GAOFEN-8 [+]",
+      "max_probability": "3.590E-05",
+      "dilution_km": "0.753"
+    },
+    {
+      "tca_utc": "2026-09-20 05:27:12.203",
+      "min_range_km": "0.566",
       "rel_speed_km_s": "0.001",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-19 03:48:51.177",
-      "min_range_km": "0.635",
+      "tca_utc": "2026-09-20 07:00:34.091",
+      "min_range_km": "0.613",
       "rel_speed_km_s": "0.001",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-19 05:21:35.963",
-      "min_range_km": "0.694",
+      "tca_utc": "2026-09-20 08:33:52.236",
+      "min_range_km": "0.663",
       "rel_speed_km_s": "0.001",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-19 06:54:20.600",
-      "min_range_km": "0.754",
+      "tca_utc": "2026-09-20 10:07:07.199",
+      "min_range_km": "0.713",
       "rel_speed_km_s": "0.001",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-19 08:27:05.094",
-      "min_range_km": "0.817",
+      "tca_utc": "2026-09-20 11:40:18.488",
+      "min_range_km": "0.765",
       "rel_speed_km_s": "0.001",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-19 09:59:49.592",
-      "min_range_km": "0.881",
+      "tca_utc": "2026-09-20 13:13:26.485",
+      "min_range_km": "0.819",
       "rel_speed_km_s": "0.001",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-19 11:32:34.146",
-      "min_range_km": "0.948",
+      "tca_utc": "2026-09-20 14:46:31.322",
+      "min_range_km": "0.874",
       "rel_speed_km_s": "0.001",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-19 13:05:18.663",
-      "min_range_km": "1.016",
+      "tca_utc": "2026-09-20 16:19:33.571",
+      "min_range_km": "0.931",
       "rel_speed_km_s": "0.001",
       "iss_norad": "25544",
       "other_norad": "100057",
       "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
     },
     {
-      "tca_utc": "2026-09-24 04:59:22.576",
-      "min_range_km": "1.033",
-      "rel_speed_km_s": "14.751",
+      "tca_utc": "2026-09-20 17:52:32.263",
+      "min_range_km": "0.989",
+      "rel_speed_km_s": "0.001",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-20 19:25:29.127",
+      "min_range_km": "1.048",
+      "rel_speed_km_s": "0.001",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-20 20:58:23.640",
+      "min_range_km": "1.109",
+      "rel_speed_km_s": "0.001",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-20 22:31:16.171",
+      "min_range_km": "1.172",
+      "rel_speed_km_s": "0.001",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 00:04:06.908",
+      "min_range_km": "1.235",
+      "rel_speed_km_s": "0.001",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 01:36:55.806",
+      "min_range_km": "1.301",
+      "rel_speed_km_s": "0.001",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 03:09:43.406",
+      "min_range_km": "1.368",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 04:42:28.969",
+      "min_range_km": "1.436",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 06:15:13.340",
+      "min_range_km": "1.506",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 07:11:38.582",
+      "min_range_km": "2.604",
+      "rel_speed_km_s": "14.692",
+      "iss_norad": "25544",
+      "other_norad": "57585",
+      "other_name": "OBJECT F [+]",
+      "max_probability": "1.682E-05",
+      "dilution_km": "1.440"
+    },
+    {
+      "tca_utc": "2026-09-21 07:47:56.363",
+      "min_range_km": "1.577",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 09:20:37.859",
+      "min_range_km": "1.649",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 10:53:17.878",
+      "min_range_km": "1.724",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 12:25:56.611",
+      "min_range_km": "1.799",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 13:58:33.744",
+      "min_range_km": "1.876",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 15:31:09.534",
+      "min_range_km": "1.955",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 17:03:43.540",
+      "min_range_km": "2.034",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 18:36:15.567",
+      "min_range_km": "2.116",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 20:08:45.496",
+      "min_range_km": "2.199",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 20:08:45.944",
+      "min_range_km": "2.199",
+      "rel_speed_km_s": "0.002",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 21:20:23.202",
+      "min_range_km": "2.277",
+      "rel_speed_km_s": "15.319",
+      "iss_norad": "25544",
+      "other_norad": "39469",
+      "other_name": "SMDC ONE 2.4 [+]",
+      "max_probability": "1.761E-05",
+      "dilution_km": "1.574"
+    },
+    {
+      "tca_utc": "2026-09-21 21:41:13.278",
+      "min_range_km": "2.283",
+      "rel_speed_km_s": "0.003",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-21 23:13:38.543",
+      "min_range_km": "2.369",
+      "rel_speed_km_s": "0.003",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-22 00:46:00.006",
+      "min_range_km": "2.456",
+      "rel_speed_km_s": "0.003",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-22 02:18:17.276",
+      "min_range_km": "2.544",
+      "rel_speed_km_s": "0.003",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-22 03:50:28.896",
+      "min_range_km": "2.634",
+      "rel_speed_km_s": "0.003",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-22 05:22:31.355",
+      "min_range_km": "2.726",
+      "rel_speed_km_s": "0.003",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-22 06:54:14.910",
+      "min_range_km": "2.819",
+      "rel_speed_km_s": "0.003",
+      "iss_norad": "25544",
+      "other_norad": "100057",
+      "other_name": "SOYUZ-MS 29 [+]",
+      "max_probability": "1.000E+00",
+      "dilution_km": "0.000"
+    },
+    {
+      "tca_utc": "2026-09-24 06:32:26.973",
+      "min_range_km": "3.606",
+      "rel_speed_km_s": "14.750",
       "iss_norad": "25544",
       "other_norad": "60488",
       "other_name": "FLOCK 4BE-31 [+]",
-      "max_probability": "1.050E-04",
-      "dilution_km": "0.582"
-    },
-    {
-      "tca_utc": "2026-09-19 14:38:03.179",
-      "min_range_km": "1.087",
-      "rel_speed_km_s": "0.001",
-      "iss_norad": "25544",
-      "other_norad": "100057",
-      "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
-    },
-    {
-      "tca_utc": "2026-09-19 16:10:47.679",
-      "min_range_km": "1.159",
-      "rel_speed_km_s": "0.001",
-      "iss_norad": "25544",
-      "other_norad": "100057",
-      "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
-    },
-    {
-      "tca_utc": "2026-09-19 17:43:32.313",
-      "min_range_km": "1.233",
-      "rel_speed_km_s": "0.001",
-      "iss_norad": "25544",
-      "other_norad": "100057",
-      "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
-    },
-    {
-      "tca_utc": "2026-09-19 19:16:16.936",
-      "min_range_km": "1.310",
-      "rel_speed_km_s": "0.001",
-      "iss_norad": "25544",
-      "other_norad": "100057",
-      "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
-    },
-    {
-      "tca_utc": "2026-09-19 20:49:01.637",
-      "min_range_km": "1.388",
-      "rel_speed_km_s": "0.002",
-      "iss_norad": "25544",
-      "other_norad": "100057",
-      "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
-    },
-    {
-      "tca_utc": "2026-09-19 22:21:46.483",
-      "min_range_km": "1.469",
-      "rel_speed_km_s": "0.002",
-      "iss_norad": "25544",
-      "other_norad": "100057",
-      "other_name": "SOYUZ-MS 29 [+]",
-      "max_probability": "1.662E-02",
-      "dilution_km": "0.030"
+      "max_probability": "8.628E-06",
+      "dilution_km": "2.028"
     }
   ]
 }
