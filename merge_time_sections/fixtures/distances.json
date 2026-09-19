@@ -1,0 +1,107 @@
+{
+  "request": {
+    "start_time": "2026-09-18T10:00:00Z",
+    "end_time": "2026-09-18T10:10:00Z",
+    "step_seconds": 1,
+    "critical_distance_km": 1.0
+  },
+  "distance_unit": "km",
+  "speed_unit": "km/s",
+  "samples": [
+    {
+      "timestamp": "2026-09-18T10:00:00Z",
+      "nearest_object": {
+        "norad_id": 100057,
+        "name": "SOYUZ-MS 29 [+]",
+        "object_type": "payload"
+      },
+      "distance_km": 1.42,
+      "relative_speed_km_s": 0.012,
+      "is_critical": false
+    },
+    {
+      "timestamp": "2026-09-18T10:04:00Z",
+      "nearest_object": {
+        "norad_id": 100057,
+        "name": "SOYUZ-MS 29 [+]",
+        "object_type": "payload"
+      },
+      "distance_km": 0.18,
+      "relative_speed_km_s": 0.009,
+      "is_critical": true
+    },
+    {
+      "timestamp": "2026-09-18T10:08:00Z",
+      "nearest_object": {
+        "norad_id": 100057,
+        "name": "SOYUZ-MS 29 [+]",
+        "object_type": "payload"
+      },
+      "distance_km": 0.91,
+      "relative_speed_km_s": 0.011,
+      "is_critical": true
+    },
+    {
+      "timestamp": "2026-09-18T10:12:00Z",
+      "nearest_object": {
+        "norad_id": 100057,
+        "name": "SOYUZ-MS 29 [+]",
+        "object_type": "payload"
+      },
+      "distance_km": 2.4,
+      "relative_speed_km_s": 0.014,
+      "is_critical": false
+    },
+    {
+      "timestamp": "2026-09-18T10:40:00Z",
+      "nearest_object": {
+        "norad_id": 100057,
+        "name": "SOYUZ-MS 29 [+]",
+        "object_type": "payload"
+      },
+      "distance_km": 6.1,
+      "relative_speed_km_s": 0.02,
+      "is_critical": false
+    },
+    {
+      "timestamp": "2026-09-18T11:20:00Z",
+      "nearest_object": {
+        "norad_id": 100057,
+        "name": "SOYUZ-MS 29 [+]",
+        "object_type": "payload"
+      },
+      "distance_km": 9.8,
+      "relative_speed_km_s": 0.018,
+      "is_critical": false
+    }
+  ],
+  "summary": {
+    "minimum_distance_km": 0.18,
+    "tca": "2026-09-18T10:04:00Z",
+    "nearest_object": {
+      "norad_id": 100057,
+      "name": "SOYUZ-MS 29 [+]"
+    },
+    "critical_duration_seconds": 240
+  },
+  "critical_intervals": [
+    {
+      "start_time": "2026-09-18T10:04:00Z",
+      "end_time": "2026-09-18T10:08:00Z",
+      "tca": "2026-09-18T10:04:00Z",
+      "minimum_distance_km": 0.18,
+      "maximum_relative_speed_km_s": 0.011,
+      "object": {
+        "norad_id": 100057,
+        "name": "SOYUZ-MS 29 [+]",
+        "object_type": "payload"
+      }
+    }
+  ],
+  "data_quality": {
+    "status": "COMPLETE",
+    "warnings": [],
+    "elements_epoch": "2026-09-18T06:00:00Z",
+    "calculated_at": "2026-09-18T10:00:00Z"
+  }
+}
