@@ -1,0 +1,38 @@
+{
+  "fetched_at": "2026-09-19T07:40:57.585328+00:00",
+  "source": "CelesTrak SOCRATES Plus",
+  "url": "https://celestrak.org/SOCRATES/table-socrates.php?CATNR=25544",
+  "count": 3,
+  "events": [
+    {
+      "tca_utc": "2026-09-21 21:20:21.992",
+      "min_range_km": "1.732",
+      "rel_speed_km_s": "15.319",
+      "iss_norad": "25544",
+      "other_norad": "39469",
+      "other_name": "SMDC ONE 2.4 [+]",
+      "max_probability": "3.045E-05",
+      "dilution_km": "1.197"
+    },
+    {
+      "tca_utc": "2026-09-24 04:59:21.752",
+      "min_range_km": "3.507",
+      "rel_speed_km_s": "14.751",
+      "iss_norad": "25544",
+      "other_norad": "60488",
+      "other_name": "FLOCK 4BE-31 [+]",
+      "max_probability": "9.119E-06",
+      "dilution_km": "1.974"
+    },
+    {
+      "tca_utc": "2026-09-23 07:34:27.941",
+      "min_range_km": "4.979",
+      "rel_speed_km_s": "9.422",
+      "iss_norad": "25544",
+      "other_norad": "64888",
+      "other_name": "OBJECT N [+]",
+      "max_probability": "8.800E-06",
+      "dilution_km": "1.440"
+    }
+  ]
+}
