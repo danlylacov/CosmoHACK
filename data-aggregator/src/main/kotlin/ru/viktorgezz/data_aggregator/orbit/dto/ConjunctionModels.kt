@@ -1,4 +1,4 @@
-package ru.viktorgezz.data_aggregator.weather.dto
+package ru.viktorgezz.data_aggregator.orbit.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime

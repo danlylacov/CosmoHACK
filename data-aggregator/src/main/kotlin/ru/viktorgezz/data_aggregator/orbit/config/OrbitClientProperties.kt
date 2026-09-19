@@ -1,9 +1,9 @@
-package ru.viktorgezz.data_aggregator.weather.config
+package ru.viktorgezz.data_aggregator.orbit.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
-@ConfigurationProperties(prefix = "weather.client")
-data class WeatherClientProperties(
+@ConfigurationProperties(prefix = "orbit.client")
+data class OrbitClientProperties(
     val urlBase: String,
     val urlPositions: String,
     val urlDistances: String,

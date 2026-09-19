@@ -1,4 +1,4 @@
-package ru.viktorgezz.data_aggregator.weather.controller
+package ru.viktorgezz.data_aggregator.orbit.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.viktorgezz.data_aggregator.common.UpstreamResult
-import ru.viktorgezz.data_aggregator.weather.client.WeatherApiClient
-import ru.viktorgezz.data_aggregator.weather.dto.ConjunctionRequest
-import ru.viktorgezz.data_aggregator.weather.dto.ConjunctionResponse
-import ru.viktorgezz.data_aggregator.weather.dto.ErrorResponse
-import ru.viktorgezz.data_aggregator.weather.dto.HealthResponse
-import ru.viktorgezz.data_aggregator.weather.dto.PositionsRequest
-import ru.viktorgezz.data_aggregator.weather.dto.PositionsResponse
+import ru.viktorgezz.data_aggregator.orbit.client.OrbitApiClient
+import ru.viktorgezz.data_aggregator.orbit.dto.ConjunctionRequest
+import ru.viktorgezz.data_aggregator.orbit.dto.ConjunctionResponse
+import ru.viktorgezz.data_aggregator.orbit.dto.ErrorResponse
+import ru.viktorgezz.data_aggregator.orbit.dto.HealthResponse
+import ru.viktorgezz.data_aggregator.orbit.dto.PositionsRequest
+import ru.viktorgezz.data_aggregator.orbit.dto.PositionsResponse
 
 @RestController
-@RequestMapping("/weather")
-class WeatherProxyController(private val client: WeatherApiClient) {
+@RequestMapping("/orbit")
+class OrbitProxyController(private val client: OrbitApiClient) {
 
     @Operation(summary = "Проксирует health-check вышестоящего orbit-сервиса")
     @ApiResponses(
