@@ -1,4 +1,4 @@
-package ru.viktorgezz.data_aggregator.weather.client
+package ru.viktorgezz.data_aggregator.orbit.client
 
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -7,18 +7,19 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import ru.viktorgezz.data_aggregator.common.UpstreamResult
-import ru.viktorgezz.data_aggregator.weather.config.WeatherClientProperties
-import ru.viktorgezz.data_aggregator.weather.dto.*
+import ru.viktorgezz.data_aggregator.orbit.config.OrbitClientProperties
+import ru.viktorgezz.data_aggregator.orbit.controller.OrbitUpstreamUnavailableException
+import ru.viktorgezz.data_aggregator.orbit.dto.*
 import tools.jackson.databind.json.JsonMapper
 import java.io.IOException
 import java.net.HttpURLConnection.HTTP_BAD_GATEWAY
 
 private val JSON_MEDIA_TYPE = "application/json".toMediaType()
 
-class WeatherApiClient(
+class OrbitApiClient(
     private val okHttpClient: OkHttpClient,
     private val jsonMapper: JsonMapper,
-    private val properties: WeatherClientProperties,
+    private val properties: OrbitClientProperties,
 ) {
 
     fun health(): UpstreamResult<HealthResponse> =
@@ -53,7 +54,7 @@ class WeatherApiClient(
                 }
             }
         } catch (e: IOException) {
-            throw WeatherUpstreamUnavailableException(
+            throw OrbitUpstreamUnavailableException(
                 "Не удалось обратиться к вышестоящему сервису по адресу ${request.url}",
                 e,
             )

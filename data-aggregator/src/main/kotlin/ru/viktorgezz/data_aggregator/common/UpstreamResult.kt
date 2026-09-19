@@ -1,6 +1,6 @@
 package ru.viktorgezz.data_aggregator.common
 
-import ru.viktorgezz.data_aggregator.weather.dto.ErrorResponse
+import ru.viktorgezz.data_aggregator.orbit.dto.ErrorResponse
 
 sealed interface UpstreamResult<out T> {
     data class Success<T>(val status: Int, val body: T) : UpstreamResult<T>
