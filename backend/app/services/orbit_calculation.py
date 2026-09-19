@@ -28,7 +28,24 @@ class OrbitCalculationService:
         self._max_elements_age = timedelta(hours=max_elements_age_hours)
 
     async def calculate(self, start_time: datetime, end_time: datetime) -> CalculationResult:
+        # #region agent log
+        _t0 = __import__("time").monotonic()
+        try:
+            import json as _json, time as _time
+            with open("/Users/daniil/PycharmProjects/CosmoHACK/.cursor/debug-9c32b6.log", "a") as _f:
+                _f.write(_json.dumps({"sessionId":"9c32b6","hypothesisId":"B","location":"orbit_calculation.py:calculate:start","message":"calculate started","data":{"start":start_time.isoformat(),"end":end_time.isoformat(),"window_s":(end_time-start_time).total_seconds()},"timestamp":int(_time.time()*1000)})+"\n")
+        except Exception:
+            pass
+        # #endregion
         snapshot = await self._provider.get_snapshot()
+        # #region agent log
+        try:
+            import json as _json, time as _time
+            with open("/Users/daniil/PycharmProjects/CosmoHACK/.cursor/debug-9c32b6.log", "a") as _f:
+                _f.write(_json.dumps({"sessionId":"9c32b6","hypothesisId":"A","location":"orbit_calculation.py:calculate:snapshot","message":"snapshot ready","data":{"n_elements":len(snapshot.elements),"elapsed_s":round(__import__("time").monotonic()-_t0,3)},"timestamp":int(_time.time()*1000)})+"\n")
+        except Exception:
+            pass
+        # #endregion
         by_id = {item.norad_id: item for item in snapshot.elements}
         iss_elements = by_id.get(ISS_NORAD_ID)
         if iss_elements is None:
@@ -40,6 +57,15 @@ class OrbitCalculationService:
             )
 
         times = self.build_timeline(start_time, end_time)
+        # #region agent log
+        _t_prop = __import__("time").monotonic()
+        try:
+            import json as _json, time as _time
+            with open("/Users/daniil/PycharmProjects/CosmoHACK/.cursor/debug-9c32b6.log", "a") as _f:
+                _f.write(_json.dumps({"sessionId":"9c32b6","hypothesisId":"D","location":"orbit_calculation.py:calculate:timeline","message":"timeline built","data":{"n_times":len(times),"elapsed_s":round(__import__("time").monotonic()-_t0,3)},"timestamp":int(_time.time()*1000)})+"\n")
+        except Exception:
+            pass
+        # #endregion
         try:
             iss = await asyncio.to_thread(self._propagation.propagate, iss_elements, times)
         except Exception as exc:
@@ -54,6 +80,15 @@ class OrbitCalculationService:
         accumulator = NearestObjectAccumulator(iss)
         warnings = list(snapshot.warnings)
         used_epochs = [iss_elements.epoch]
+        # #region agent log
+        try:
+            import json as _json, time as _time
+            with open("/Users/daniil/PycharmProjects/CosmoHACK/.cursor/debug-9c32b6.log", "a") as _f:
+                _f.write(_json.dumps({"sessionId":"9c32b6","hypothesisId":"B","location":"orbit_calculation.py:calculate:iss","message":"ISS propagated","data":{"n_times":len(times),"iss_elapsed_s":round(__import__("time").monotonic()-_t_prop,3)},"timestamp":int(_time.time()*1000)})+"\n")
+        except Exception:
+            pass
+        # #endregion
+        _n_considered = 0
         for elements in snapshot.elements:
             if elements.norad_id == ISS_NORAD_ID:
                 continue
@@ -75,7 +110,16 @@ class OrbitCalculationService:
                 )
             accumulator.consider(elements, propagated)
             used_epochs.append(elements.epoch)
+            _n_considered += 1
 
+        # #region agent log
+        try:
+            import json as _json, time as _time
+            with open("/Users/daniil/PycharmProjects/CosmoHACK/.cursor/debug-9c32b6.log", "a") as _f:
+                _f.write(_json.dumps({"sessionId":"9c32b6","hypothesisId":"B","location":"orbit_calculation.py:calculate:candidates","message":"all candidates processed","data":{"n_elements":len(snapshot.elements),"n_considered":_n_considered,"prop_elapsed_s":round(__import__("time").monotonic()-_t_prop,3),"total_elapsed_s":round(__import__("time").monotonic()-_t0,3)},"timestamp":int(_time.time()*1000)})+"\n")
+        except Exception:
+            pass
+        # #endregion
         missing = np.isnan(accumulator.distances_km)
         if missing.all():
             quality_status = "NO_CANDIDATES"

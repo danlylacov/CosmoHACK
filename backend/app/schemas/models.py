@@ -11,8 +11,8 @@ class ApiModel(BaseModel):
 
 
 class TimeRangeRequest(ApiModel):
-    start_time: datetime
-    end_time: datetime
+    start_time: datetime = Field(examples=["2026-09-19T00:00:00Z"])
+    end_time: datetime = Field(examples=["2026-09-19T00:01:00Z"])
 
     @field_validator("start_time", "end_time")
     @classmethod

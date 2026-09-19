@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CosmoHACK.iml" filepath="$PROJECT_DIR$/.idea/CosmoHACK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/cosmohack-backend.iml" filepath="$PROJECT_DIR$/.idea/cosmohack-backend.iml" />
     </modules>
   </component>
 </project>

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 from datetime import UTC, datetime
-from typing import Any
 
 import httpx
 from bs4 import BeautifulSoup
@@ -15,8 +14,8 @@ from app.providers.base import OrbitalElements, OrbitalElementsProvider, Orbital
 ISS_NORAD_ID = 25544
 SOCRATES_URL = "https://celestrak.org/SOCRATES/table-socrates.php"
 GP_URL = "https://celestrak.org/NORAD/elements/gp.php"
-SATCAT_URL = "https://celestrak.org/satcat/records.php"
 USER_AGENT = "CosmoHACK-Orbit-Service/1.0"
+GP_CONNECTIONS = 8
 
 
 class CelesTrakOrbitalElementsProvider(OrbitalElementsProvider):
@@ -26,20 +25,50 @@ class CelesTrakOrbitalElementsProvider(OrbitalElementsProvider):
 
     async def get_snapshot(self) -> OrbitalElementsSnapshot:
         retrieved_at = datetime.now(UTC)
+        # #region agent log
+        _t0 = __import__("time").monotonic()
+        try:
+            import json as _json, time as _time
+            with open("/Users/daniil/PycharmProjects/CosmoHACK/.cursor/debug-9c32b6.log", "a") as _f:
+                _f.write(_json.dumps({"sessionId":"9c32b6","hypothesisId":"A","location":"celestrak.py:get_snapshot:start","message":"CelesTrak snapshot fetch started","data":{"max_records":self._max_records,"timeout":self._timeout},"timestamp":int(_time.time()*1000)})+"\n")
+        except Exception:
+            pass
+        # #endregion
         try:
             async with httpx.AsyncClient(
                 timeout=self._timeout,
                 headers={"User-Agent": USER_AGENT},
                 follow_redirects=True,
+                limits=httpx.Limits(
+                    max_connections=GP_CONNECTIONS,
+                    max_keepalive_connections=GP_CONNECTIONS,
+                ),
             ) as client:
                 candidates = await self._fetch_candidate_ids(client)
                 ids = [ISS_NORAD_ID, *sorted(candidates - {ISS_NORAD_ID})]
+                # #region agent log
+                try:
+                    import json as _json, time as _time
+                    with open("/Users/daniil/PycharmProjects/CosmoHACK/.cursor/debug-9c32b6.log", "a") as _f:
+                        _f.write(_json.dumps({"sessionId":"9c32b6","hypothesisId":"A","location":"celestrak.py:get_snapshot:candidates","message":"SOCRATES candidates parsed","data":{"n_candidates":len(candidates),"n_ids":len(ids),"elapsed_s":round(__import__("time").monotonic()-_t0,3)},"timestamp":int(_time.time()*1000)})+"\n")
+                except Exception:
+                    pass
+                # #endregion
                 results = await asyncio.gather(
                     *(self._fetch_elements(client, norad_id, retrieved_at) for norad_id in ids),
                     return_exceptions=True,
                 )
         except httpx.HTTPError as exc:
             raise SourceUnavailableError(f"CelesTrak request failed: {exc}") from exc
+        # #region agent log
+        try:
+            import json as _json, time as _time
+            _n_err = sum(1 for r in results if isinstance(r, Exception))
+            with open("/Users/daniil/PycharmProjects/CosmoHACK/.cursor/debug-9c32b6.log", "a") as _f:
+                _f.write(_json.dumps({"sessionId":"9c32b6","hypothesisId":"A","location":"celestrak.py:get_snapshot:end","message":"CelesTrak snapshot fetch finished","data":{"n_ids":len(ids),"n_errors":_n_err,"elapsed_s":round(__import__("time").monotonic()-_t0,3)},"timestamp":int(_time.time()*1000)})+"\n")
+        except Exception:
+            pass
+        # #endregion
 
         elements: list[OrbitalElements] = []
         warnings: list[str] = []
@@ -94,18 +123,13 @@ class CelesTrakOrbitalElementsProvider(OrbitalElementsProvider):
         norad_id: int,
         retrieved_at: datetime,
     ) -> OrbitalElements:
-        tle_response, satcat_response = await asyncio.gather(
-            client.get(GP_URL, params={"CATNR": norad_id, "FORMAT": "TLE"}),
-            client.get(SATCAT_URL, params={"CATNR": norad_id, "FORMAT": "JSON"}),
-        )
+        tle_response = await client.get(GP_URL, params={"CATNR": norad_id, "FORMAT": "TLE"})
         try:
             tle_response.raise_for_status()
-            satcat_response.raise_for_status()
         except httpx.HTTPError as exc:
             raise SourceUnavailableError(f"NORAD {norad_id} could not be fetched: {exc}") from exc
 
         name, line1, line2 = self._parse_tle(tle_response.text, norad_id)
-        metadata = self._parse_satcat(satcat_response, norad_id)
         try:
             epoch = sat_epoch_datetime(Satrec.twoline2rv(line1, line2)).astimezone(UTC)
         except (TypeError, ValueError) as exc:
@@ -113,8 +137,8 @@ class CelesTrakOrbitalElementsProvider(OrbitalElementsProvider):
 
         return OrbitalElements(
             norad_id=norad_id,
-            name=str(metadata.get("OBJECT_NAME") or name).strip(),
-            object_type=self._normalize_object_type(metadata.get("OBJECT_TYPE")),
+            name=name.strip(),
+            object_type=self._object_type_from_name(name),
             tle_line1=line1,
             tle_line2=line2,
             epoch=epoch,
@@ -130,19 +154,10 @@ class CelesTrakOrbitalElementsProvider(OrbitalElementsProvider):
         return lines[-3], lines[-2], lines[-1]
 
     @staticmethod
-    def _parse_satcat(response: httpx.Response, norad_id: int) -> dict[str, Any]:
-        try:
-            payload = response.json()
-        except ValueError as exc:
-            raise OrbitalElementsError(f"Invalid SATCAT metadata for NORAD {norad_id}") from exc
-        if not isinstance(payload, list) or not payload or not isinstance(payload[0], dict):
-            raise OrbitalElementsError(f"SATCAT metadata is missing for NORAD {norad_id}")
-        return payload[0]
-
-    @staticmethod
-    def _normalize_object_type(value: Any) -> str | None:
-        mapping = {"PAY": "PAYLOAD", "R/B": "ROCKET_BODY", "DEB": "DEBRIS", "UNK": "UNKNOWN"}
-        if value is None:
-            return None
-        normalized = str(value).strip().upper()
-        return mapping.get(normalized, normalized or None)
+    def _object_type_from_name(name: str) -> str | None:
+        upper = name.upper()
+        if "DEB" in upper:
+            return "DEBRIS"
+        if "R/B" in upper:
+            return "ROCKET_BODY"
+        return None
