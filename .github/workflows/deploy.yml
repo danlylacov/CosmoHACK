@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
@@ -19,11 +19,11 @@ jobs:
           script: |
             set -e
 
-            cd /opt/my-app
+            cd /opt/my-app/CosmoHACK
 
             echo "Updating source code..."
-            git fetch origin master
-            git reset --hard origin/master
+            git fetch origin main
+            git reset --hard origin/main
 
             echo "Building Docker images..."
             docker compose build
