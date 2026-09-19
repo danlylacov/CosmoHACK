@@ -1,4 +1,4 @@
-"""1-minute grid + 30-minute sliding windows for EVA ranking."""
+"""Sliding windows of length d on a 30-minute partition of horizon n."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from datetime import timedelta
 from .timeutil import iso_z, parse_utc
 
 DEFAULT_DURATION_MIN = 30
-DEFAULT_STEP_MIN = 1
+DEFAULT_STEP_MIN = 30
 DEFAULT_TOP_K = 5
 DEFAULT_D_FAR_KM = 10.0
 
@@ -168,47 +168,36 @@ def _window_stats(grid: dict, start_i: int, duration: int) -> dict | None:
     }
 
 
-def _overlaps(left: dict, right: dict) -> bool:
-    return left["start"] < right["end"] and right["start"] < left["end"]
-
-
 def rank_eva_windows(
     bundle: dict,
+    d: int = DEFAULT_DURATION_MIN,
     *,
-    duration_min: int = DEFAULT_DURATION_MIN,
+    duration_min: int | None = None,
     step_min: int = DEFAULT_STEP_MIN,
     top_k: int = DEFAULT_TOP_K,
-    non_overlap: bool = True,
     d_far_km: float = DEFAULT_D_FAR_KM,
     d_crit_km: float | None = None,
 ) -> dict:
-    """Score 30-min EVA slots on a 1-min grid; return top-k by rising danger."""
-    if duration_min <= 0 or step_min <= 0 or top_k <= 0:
-        raise ValueError("duration_min, step_min, and top_k must be positive")
+    """Top-k windows of length `d` minutes, starts every `step_min` (default 30)."""
+    duration = duration_min if duration_min is not None else d
+    if duration <= 0 or step_min <= 0 or top_k <= 0:
+        raise ValueError("d, step_min, and top_k must be positive")
 
     grid = build_minute_grid(bundle, d_far_km=d_far_km, d_crit_km=d_crit_km)
+    n = grid["n"]
     candidates = []
-    last_start = grid["n"] - duration_min
+    last_start = n - duration
     for start_i in range(0, last_start + 1, step_min):
-        stats = _window_stats(grid, start_i, duration_min)
+        stats = _window_stats(grid, start_i, duration)
         if stats is not None:
             candidates.append(stats)
 
     candidates.sort(key=lambda item: (item["danger"], item["start"]))
-    if non_overlap:
-        picked = []
-        for window in candidates:
-            if any(_overlaps(window, taken) for taken in picked):
-                continue
-            picked.append(window)
-            if len(picked) >= top_k:
-                break
-        windows = picked
-    else:
-        windows = candidates[:top_k]
-
     return {
         "start": bundle["start"],
         "end": bundle["end"],
-        "windows": windows,
+        "d": duration,
+        "n": n,
+        "step_min": step_min,
+        "windows": candidates[:top_k],
     }
