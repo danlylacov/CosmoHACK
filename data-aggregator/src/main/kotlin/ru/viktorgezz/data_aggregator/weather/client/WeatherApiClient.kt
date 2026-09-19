@@ -39,7 +39,7 @@ class WeatherApiClient(
     private fun <T> execute(request: Request, responseType: Class<T>): UpstreamResult<T> {
         try {
             okHttpClient.newCall(request).execute().use { response ->
-                val bodyBytes = response.body.bytes()
+                val bodyBytes = response.body?.bytes() ?: ByteArray(0)
                 return if (response.isSuccessful) {
                     runCatching { jsonMapper.readValue(bodyBytes, responseType) }
                         .fold(

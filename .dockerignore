@@ -1,0 +1,52 @@
+# VCS / IDE / OS
+.git/
+.gitignore
+.gitattributes
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Docs
+README.md
+LICENSE
+HELP.md
+
+### Kotlin / Gradle / Spring ###
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+.gradle/
+.kotlin/
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### Python ###
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.eggs/
+.Python
+dist/
+wheels/
+pip-wheel-metadata/
+.venv/
+venv/
+env/
+ENV/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+.ipynb_checkpoints/
