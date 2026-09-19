@@ -1,12 +1,65 @@
+# data-aggregator :8088  →  mmod :8000, eva :8001, sepnet-sgr :8002
+# eva :8001              →  mmod :8000
+#
+# Снаружи:
+#   http://localhost:8088/ch/data-aggregator/health
+#   http://localhost:8088/ch/data-aggregator/swagger-ui.html
+#   http://localhost:8000/docs   Orbit API
+#   http://localhost:8001/docs   EVA API
+#   http://localhost:8002/docs   SEPNET-SGR
+
 services:
-  data-aggregator:
+  mmod:
     build:
-      context: ./data-aggregator
+      context: ./MMOD
       dockerfile: Dockerfile
-    image: data-aggregator:local
-    container_name: data-aggregator
+    image: mmod:local
+    container_name: mmod
     ports:
-      - "8088:8088"
+      - "8000:8000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+  eva:
+    build:
+      context: ./merge_time_sections
+      dockerfile: Dockerfile
+    image: eva:local
+    container_name: eva
+    ports:
+      - "8001:8001"
+    environment:
+      PORT: "8001"
+      CONJUNCTION_API_BASE_URL: http://mmod:8000
+      SPACE_WEATHER_BASE_URL: http://sepnet-sgr:8002
+      WEATHER_ENABLED: "0"
+      UPSTREAM_TIMEOUT_SECONDS: "180"
+    depends_on:
+      mmod:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=3)",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     restart: unless-stopped
 
   sepnet-sgr:
@@ -33,6 +86,55 @@ services:
       timeout: 5s
       retries: 5
       start_period: 60s
+    restart: unless-stopped
+
+  data-aggregator:
+    build:
+      context: ./data-aggregator
+      dockerfile: Dockerfile
+    image: data-aggregator:local
+    container_name: data-aggregator
+    ports:
+      - "8088:8088"
+    environment:
+      ORBIT_CLIENT_URL_BASE: http://mmod:8000
+      ORBIT_CLIENT_URL_POSITIONS: http://mmod:8000/api/v1/orbits/positions
+      ORBIT_CLIENT_URL_DISTANCES: http://mmod:8000/api/v1/conjunctions/distances
+      ORBIT_CLIENT_URL_HEALTH: http://mmod:8000/health
+      ORBIT_CLIENT_CONNECT_TIMEOUT_SECOND: "5"
+      ORBIT_CLIENT_READ_TIMEOUT_SECOND: "180"
+      ORBIT_CLIENT_WRITE_TIMEOUT_SECOND: "30"
+      EVA_CLIENT_URL_BASE: http://eva:8001
+      EVA_CLIENT_URL_WINDOWS: http://eva:8001/api/v1/eva/windows
+      EVA_CLIENT_URL_HEALTH: http://eva:8001/health
+      EVA_CLIENT_CONNECT_TIMEOUT_SECOND: "5"
+      EVA_CLIENT_READ_TIMEOUT_SECOND: "180"
+      EVA_CLIENT_WRITE_TIMEOUT_SECOND: "30"
+      WEATHER_CLIENT_URL_BASE: http://sepnet-sgr:8002
+      WEATHER_CLIENT_URL_FORECAST: http://sepnet-sgr:8002/forecast
+      WEATHER_CLIENT_URL_HEALTH: http://sepnet-sgr:8002/health
+      WEATHER_CLIENT_CONNECT_TIMEOUT_SECOND: "5"
+      WEATHER_CLIENT_READ_TIMEOUT_SECOND: "180"
+      WEATHER_CLIENT_WRITE_TIMEOUT_SECOND: "30"
+    depends_on:
+      mmod:
+        condition: service_healthy
+      eva:
+        condition: service_healthy
+      sepnet-sgr:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-fsS",
+          "http://127.0.0.1:8088/ch/data-aggregator/health",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
     restart: unless-stopped
 
 volumes:

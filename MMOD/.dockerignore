@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.md
+.DS_Store
+trajectories.json
+Dockerfile
+.dockerignore
