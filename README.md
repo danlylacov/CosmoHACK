@@ -3,6 +3,9 @@
 REST API для расчёта траекторий МКС и объектов из скрининга CelesTrak SOCRATES.  
 Координаты возвращаются в системе TEME, единицы — километры и км/с.
 
+Окна ВКД вынесены в отдельный сервис: `merge_time_sections` на порту **8001**  
+(`POST /api/v1/eva/windows`). См. `merge_time_sections/README.md`.
+
 ---
 
 ## Запуск
@@ -18,17 +21,6 @@ Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
 ---
 
 ## Endpoints
-
-### GET /health
-
-Проверка работоспособности сервиса.
-
-**Ответ:**
-```json
-{ "status": "ok" }
-```
-
----
 
 ### POST /api/v1/orbits/positions
 

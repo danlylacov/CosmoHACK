@@ -124,8 +124,10 @@ paths:
       description: Two-stage ranking of fixed-length EVA slots over [start_time, end_time).
         Stage 1 places duration_min windows inside contiguous fully-safe minute spans.
         Stage 2 fills remaining top_k from all step-aligned windows without hiding risk
-        (CAUTION / REQUIRES_REVIEW / INSUFFICIENT_DATA). Distances come from the internal
-        `_compute_distances` function, not over HTTP. Weather is unused (eva_min is null).
+        (CAUTION / REQUIRES_REVIEW / INSUFFICIENT_DATA). Served by the EVA ranking service
+        (`merge_time_sections`, default port 8001). Distances are fetched from the Orbit API
+        `POST /api/v1/conjunctions/distances` over HTTP. Weather is unused until the weather
+        service is enabled (`eva_min` is null).
         critical_distance_km is required. Windows that overlap a critical interval are
         returned with a warning, not omitted. Changing duration_min, step_min or top_k
         re-ranks without recomputing SGP4 when the orbital snapshot is unchanged.
