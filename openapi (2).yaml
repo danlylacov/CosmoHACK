@@ -1,0 +1,581 @@
+openapi: 3.1.0
+info:
+  title: CosmoHACK Orbit API
+  description: UTC/TEME orbit propagation for ISS (NORAD 25544) and objects screened by CelesTrak
+    SOCRATES. Proximity thresholds are not collision probabilities.
+  version: 1.0.0
+paths:
+  /health:
+    get:
+      tags:
+      - system
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /api/v1/orbits/positions:
+    post:
+      tags:
+      - orbits
+      summary: ISS and nearest screened-object states
+      description: Returns one TEME sample per minute in [start_time, end_time). Screened
+        objects are all unique ISS SOCRATES candidates. `screened_objects` is empty when no
+        candidate can be propagated; no coordinates are fabricated. `start_time` and `end_time`
+        must include a timezone; the requested window must be (0, 24] hours.
+      operationId: positions_api_v1_orbits_positions_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PositionsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionsResponse'
+        '422':
+          description: 'Request validation failed, stale orbital elements, or SGP4 propagation
+            error. Codes: VALIDATION_ERROR, STALE_ORBITAL_ELEMENTS, PROPAGATION_ERROR.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: 'Orbital elements could not be parsed from the upstream source. Code:
+            ORBITAL_ELEMENTS_ERROR.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: 'CelesTrak / SOCRATES source is unavailable. Code: SOURCE_UNAVAILABLE.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 'Unhandled orbit service failure. Code: ORBIT_SERVICE_ERROR.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/conjunctions/distances:
+    post:
+      tags:
+      - conjunctions
+      summary: Distances to the nearest screened object
+      description: The optional critical_distance_km is a proximity-screening threshold, not
+        a collision probability. Without it, is_critical is null and critical_intervals is
+        empty. A distance exactly equal to the threshold is not critical. `start_time` and
+        `end_time` must include a timezone; the requested window must be (0, 24] hours.
+      operationId: distances_api_v1_conjunctions_distances_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConjunctionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConjunctionResponse'
+        '422':
+          description: 'Request validation failed, stale orbital elements, or SGP4 propagation
+            error. Codes: VALIDATION_ERROR, STALE_ORBITAL_ELEMENTS, PROPAGATION_ERROR.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: 'Orbital elements could not be parsed from the upstream source. Code:
+            ORBITAL_ELEMENTS_ERROR.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: 'CelesTrak / SOCRATES source is unavailable. Code: SOURCE_UNAVAILABLE.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 'Unhandled orbit service failure. Code: ORBIT_SERVICE_ERROR.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ConjunctionRequest:
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          examples:
+          - '2026-09-19T00:00:00Z'
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+          examples:
+          - '2026-09-19T00:01:00Z'
+        critical_distance_km:
+          anyOf:
+          - type: number
+            exclusiveMinimum: 0.0
+          - type: 'null'
+          title: Critical Distance Km
+      additionalProperties: false
+      type: object
+      required:
+      - start_time
+      - end_time
+      title: ConjunctionRequest
+    ConjunctionRequestInfo:
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+        step_seconds:
+          type: integer
+          const: 1
+          title: Step Seconds
+          default: 1
+        critical_distance_km:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Critical Distance Km
+      additionalProperties: false
+      type: object
+      required:
+      - start_time
+      - end_time
+      title: ConjunctionRequestInfo
+    ConjunctionResponse:
+      properties:
+        request:
+          $ref: '#/components/schemas/ConjunctionRequestInfo'
+        distance_unit:
+          type: string
+          const: km
+          title: Distance Unit
+          default: km
+        speed_unit:
+          type: string
+          const: km/s
+          title: Speed Unit
+          default: km/s
+        samples:
+          items:
+            $ref: '#/components/schemas/DistanceSample'
+          type: array
+          title: Samples
+        summary:
+          $ref: '#/components/schemas/DistanceSummary'
+        critical_intervals:
+          items:
+            $ref: '#/components/schemas/CriticalInterval'
+          type: array
+          title: Critical Intervals
+        data_quality:
+          $ref: '#/components/schemas/DataQuality'
+      additionalProperties: false
+      type: object
+      required:
+      - request
+      - samples
+      - summary
+      - critical_intervals
+      - data_quality
+      title: ConjunctionResponse
+    CriticalInterval:
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+        tca:
+          type: string
+          format: date-time
+          title: Tca
+        minimum_distance_km:
+          type: number
+          title: Minimum Distance Km
+        maximum_relative_speed_km_s:
+          type: number
+          title: Maximum Relative Speed Km S
+        object:
+          $ref: '#/components/schemas/ObjectIdentity'
+      additionalProperties: false
+      type: object
+      required:
+      - start_time
+      - end_time
+      - tca
+      - minimum_distance_km
+      - maximum_relative_speed_km_s
+      - object
+      title: CriticalInterval
+    DataQuality:
+      properties:
+        status:
+          type: string
+          enum:
+          - COMPLETE
+          - PARTIAL
+          - NO_CANDIDATES
+          title: Status
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+        elements_epoch:
+          type: string
+          format: date-time
+          title: Elements Epoch
+        calculated_at:
+          type: string
+          format: date-time
+          title: Calculated At
+      additionalProperties: false
+      type: object
+      required:
+      - status
+      - elements_epoch
+      - calculated_at
+      title: DataQuality
+    DistanceSample:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+        nearest_object:
+          anyOf:
+          - $ref: '#/components/schemas/ObjectIdentity'
+          - type: 'null'
+        distance_km:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Distance Km
+        relative_speed_km_s:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Relative Speed Km S
+        is_critical:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Critical
+      additionalProperties: false
+      type: object
+      required:
+      - timestamp
+      - nearest_object
+      - distance_km
+      - relative_speed_km_s
+      title: DistanceSample
+    DistanceSummary:
+      properties:
+        minimum_distance_km:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Minimum Distance Km
+        tca:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Tca
+        nearest_object:
+          anyOf:
+          - $ref: '#/components/schemas/SummaryObject'
+          - type: 'null'
+        critical_duration_seconds:
+          type: integer
+          title: Critical Duration Seconds
+      additionalProperties: false
+      type: object
+      required:
+      - minimum_distance_km
+      - tca
+      - nearest_object
+      - critical_duration_seconds
+      title: DistanceSummary
+    ErrorBody:
+      properties:
+        code:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+          - STALE_ORBITAL_ELEMENTS
+          - PROPAGATION_ERROR
+          - ORBITAL_ELEMENTS_ERROR
+          - SOURCE_UNAVAILABLE
+          - ORBIT_SERVICE_ERROR
+          title: Code
+        message:
+          type: string
+          title: Message
+        details:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Details
+      additionalProperties: false
+      type: object
+      required:
+      - code
+      - message
+      title: ErrorBody
+    ErrorResponse:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      additionalProperties: false
+      type: object
+      required:
+      - error
+      title: ErrorResponse
+    HealthResponse:
+      properties:
+        status:
+          type: string
+          const: ok
+          title: Status
+          default: ok
+      additionalProperties: false
+      type: object
+      title: HealthResponse
+    IssState:
+      properties:
+        norad_id:
+          type: integer
+          title: Norad Id
+          default: 25544
+        position_km:
+          $ref: '#/components/schemas/Vector3'
+        velocity_km_s:
+          $ref: '#/components/schemas/Vector3'
+      additionalProperties: false
+      type: object
+      required:
+      - position_km
+      - velocity_km_s
+      title: IssState
+    ObjectIdentity:
+      properties:
+        norad_id:
+          type: integer
+          title: Norad Id
+        name:
+          type: string
+          title: Name
+        object_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Object Type
+      additionalProperties: false
+      type: object
+      required:
+      - norad_id
+      - name
+      title: ObjectIdentity
+    ObjectState:
+      properties:
+        norad_id:
+          type: integer
+          title: Norad Id
+        name:
+          type: string
+          title: Name
+        object_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Object Type
+        position_km:
+          $ref: '#/components/schemas/Vector3'
+        velocity_km_s:
+          $ref: '#/components/schemas/Vector3'
+      additionalProperties: false
+      type: object
+      required:
+      - norad_id
+      - name
+      - position_km
+      - velocity_km_s
+      title: ObjectState
+    PositionSample:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+        iss:
+          $ref: '#/components/schemas/IssState'
+        screened_objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjectState'
+      additionalProperties: false
+      type: object
+      required:
+      - timestamp
+      - iss
+      - screened_objects
+      title: PositionSample
+    PositionsRequest:
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          examples:
+          - '2026-09-19T00:00:00Z'
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+          examples:
+          - '2026-09-19T00:01:00Z'
+      additionalProperties: false
+      type: object
+      required:
+      - start_time
+      - end_time
+      title: PositionsRequest
+    PositionsResponse:
+      properties:
+        request:
+          $ref: '#/components/schemas/RequestInfo'
+        coordinate_frame:
+          type: string
+          const: TEME
+          title: Coordinate Frame
+          default: TEME
+        position_unit:
+          type: string
+          const: km
+          title: Position Unit
+          default: km
+        velocity_unit:
+          type: string
+          const: km/s
+          title: Velocity Unit
+          default: km/s
+        source:
+          $ref: '#/components/schemas/SourceInfo'
+        samples:
+          items:
+            $ref: '#/components/schemas/PositionSample'
+          type: array
+          title: Samples
+        data_quality:
+          $ref: '#/components/schemas/DataQuality'
+      additionalProperties: false
+      type: object
+      required:
+      - request
+      - source
+      - samples
+      - data_quality
+      title: PositionsResponse
+    RequestInfo:
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+        step_seconds:
+          type: integer
+          const: 60
+          title: Step Seconds
+          default: 60
+      additionalProperties: false
+      type: object
+      required:
+      - start_time
+      - end_time
+      title: RequestInfo
+    SourceInfo:
+      properties:
+        name:
+          type: string
+          title: Name
+        retrieved_at:
+          type: string
+          format: date-time
+          title: Retrieved At
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - retrieved_at
+      title: SourceInfo
+    SummaryObject:
+      properties:
+        norad_id:
+          type: integer
+          title: Norad Id
+        name:
+          type: string
+          title: Name
+      additionalProperties: false
+      type: object
+      required:
+      - norad_id
+      - name
+      title: SummaryObject
+    Vector3:
+      properties:
+        x:
+          type: number
+          title: X
+        y:
+          type: number
+          title: Y
+        z:
+          type: number
+          title: Z
+      additionalProperties: false
+      type: object
+      required:
+      - x
+      - y
+      - z
+      title: Vector3
+
