@@ -1,0 +1,16 @@
+services:
+  data-aggregator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: data-aggregator:local
+    container_name: data-aggregator
+    ports:
+      - "8088:8088"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8088/ch/data-aggregator/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
