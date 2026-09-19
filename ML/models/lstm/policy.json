@@ -1,0 +1,12 @@
+{
+  "version": "space-weather-observed-csv-v2",
+  "risk_threshold": 0.1,
+  "threshold_rationale": "Research setting: flag windows from 10% calibrated exceedance probability; prioritizes avoiding missed events. Not an operational EVA limit.",
+  "min_history_fraction": 0.8,
+  "max_age_minutes": 60,
+  "min_calibration_samples": 10,
+  "min_calibration_events": 1,
+  "min_test_events": 1,
+  "min_interval_coverage": 0.7,
+  "min_brier_skill": 0.01
+}
