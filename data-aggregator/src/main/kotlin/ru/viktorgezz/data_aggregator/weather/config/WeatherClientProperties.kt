@@ -5,7 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = "weather.client")
 data class WeatherClientProperties(
     val urlBase: String,
-    val urlSpaceWeather: String,
+    val urlForecast: String,
+    val urlHealth: String,
     val connectTimeoutSecond: Long = 3,
     val readTimeoutSecond: Long = 10,
     val writeTimeoutSecond: Long = 10,

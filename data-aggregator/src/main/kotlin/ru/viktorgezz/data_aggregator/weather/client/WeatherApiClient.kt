@@ -1,18 +1,21 @@
 package ru.viktorgezz.data_aggregator.weather.client
 
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import ru.viktorgezz.data_aggregator.common.UpstreamResult
 import ru.viktorgezz.data_aggregator.weather.config.WeatherClientProperties
 import ru.viktorgezz.data_aggregator.weather.controller.WeatherUpstreamUnavailableException
-import ru.viktorgezz.data_aggregator.weather.dto.SpaceWeatherResponse
+import ru.viktorgezz.data_aggregator.weather.dto.ForecastRequest
 import ru.viktorgezz.data_aggregator.weather.dto.WeatherErrorResponse
+import ru.viktorgezz.data_aggregator.weather.dto.WeatherHTTPValidationError
 import tools.jackson.databind.json.JsonMapper
 import java.io.IOException
 import java.net.HttpURLConnection.HTTP_BAD_GATEWAY
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
+
+private val JSON_MEDIA_TYPE = "application/json".toMediaType()
 
 class WeatherApiClient(
     private val okHttpClient: OkHttpClient,
@@ -20,16 +23,17 @@ class WeatherApiClient(
     private val properties: WeatherClientProperties,
 ) {
 
-    fun spaceWeather(start: OffsetDateTime, end: OffsetDateTime): UpstreamResult<SpaceWeatherResponse, WeatherErrorResponse> =
-        execute(spaceWeatherRequest(start, end), SpaceWeatherResponse::class.java)
+    fun health(): UpstreamResult<Any, WeatherErrorResponse> =
+        execute(Request.Builder().url(properties.urlHealth.toHttpUrl()).get().build(), Any::class.java)
 
-    private fun spaceWeatherRequest(start: OffsetDateTime, end: OffsetDateTime): Request {
-        val url = properties.urlSpaceWeather.toHttpUrl().newBuilder()
-            .addQueryParameter("start", DateTimeFormatter.ISO_INSTANT.format(start))
-            .addQueryParameter("end", DateTimeFormatter.ISO_INSTANT.format(end))
+    fun forecast(request: ForecastRequest): UpstreamResult<Any, WeatherErrorResponse> =
+        execute(forecastRequest(request), Any::class.java)
+
+    private fun forecastRequest(body: ForecastRequest): Request =
+        Request.Builder()
+            .url(properties.urlForecast.toHttpUrl())
+            .post(jsonMapper.writeValueAsBytes(body).toRequestBody(JSON_MEDIA_TYPE))
             .build()
-        return Request.Builder().url(url).get().build()
-    }
 
     private fun <T> execute(request: Request, responseType: Class<T>): UpstreamResult<T, WeatherErrorResponse> {
         try {
@@ -42,7 +46,8 @@ class WeatherApiClient(
                             onFailure = { UpstreamResult.Failure(HTTP_BAD_GATEWAY, fallbackError(bodyBytes)) },
                         )
                 } else {
-                    val error = runCatching { jsonMapper.readValue(bodyBytes, WeatherErrorResponse::class.java) }
+                    val error = runCatching { jsonMapper.readValue(bodyBytes, WeatherHTTPValidationError::class.java).toErrorResponse() }
+                        .recoverCatching { jsonMapper.readValue(bodyBytes, WeatherErrorResponse::class.java) }
                         .getOrElse { fallbackError(bodyBytes) }
                     UpstreamResult.Failure(response.code, error)
                 }
@@ -54,6 +59,12 @@ class WeatherApiClient(
             )
         }
     }
+
+    private fun WeatherHTTPValidationError.toErrorResponse(): WeatherErrorResponse =
+        WeatherErrorResponse(
+            detail = detail.joinToString("; ") { "${it.loc.joinToString(".")}: ${it.msg}" }
+                .ifEmpty { "Ошибка валидации запроса" },
+        )
 
     private fun fallbackError(bodyBytes: ByteArray): WeatherErrorResponse =
         WeatherErrorResponse(
