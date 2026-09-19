@@ -1,0 +1,7 @@
+requests
+beautifulsoup4
+skyfield
+httpx
+numpy
+fastapi
+uvicorn[standard]

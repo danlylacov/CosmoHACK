@@ -50,3 +50,13 @@ ENV/
 .coverage.*
 htmlcov/
 .ipynb_checkpoints/
+
+.venv
+__pycache__
+*.pyc
+Dockerfile
+.dockerignore
+*.md
+.idea
+tests
+
