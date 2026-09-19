@@ -1,0 +1,30 @@
+{
+  "start": "2026-09-18T10:00:00Z",
+  "end": "2026-09-18T10:10:00Z",
+  "interval_minutes": 30,
+  "eva_coefficient": 0.917,
+  "records": [
+    {
+      "time": "2026-09-18T10:00:00Z",
+      "eva_coefficient": 0.917,
+      "parameters": {
+        "gfz_Hp30": 1.667,
+        "gfz_Kp": null,
+        "gfz_ap30": 6.0,
+        "swpc_mpsh_integral_electrons_g19_0_ge2_MeV": 334.9,
+        "swpc_sgps_integral_protons_g19_0_ge10_MeV": 0.229
+      }
+    },
+    {
+      "time": "2026-09-18T10:30:00Z",
+      "eva_coefficient": 0.941,
+      "parameters": {
+        "gfz_Hp30": 1.333,
+        "gfz_Kp": null,
+        "gfz_ap30": 5.0,
+        "swpc_mpsh_integral_electrons_g19_0_ge2_MeV": 280.1,
+        "swpc_sgps_integral_protons_g19_0_ge10_MeV": 0.198
+      }
+    }
+  ]
+}

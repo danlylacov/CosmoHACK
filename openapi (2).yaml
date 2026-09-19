@@ -116,6 +116,59 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/eva/windows:
+    post:
+      tags:
+      - eva
+      summary: Ranked EVA time windows
+      description: Two-stage ranking of fixed-length EVA slots over [start_time, end_time).
+        Stage 1 places duration_min windows inside contiguous fully-safe minute spans.
+        Stage 2 fills remaining top_k from all step-aligned windows without hiding risk
+        (CAUTION / REQUIRES_REVIEW / INSUFFICIENT_DATA). Distances come from the internal
+        `_compute_distances` function, not over HTTP. Weather is unused (eva_min is null).
+        critical_distance_km is required. Windows that overlap a critical interval are
+        returned with a warning, not omitted. Changing duration_min, step_min or top_k
+        re-ranks without recomputing SGP4 when the orbital snapshot is unchanged.
+      operationId: eva_windows_api_v1_eva_windows_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvaWindowsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaWindowsResponse'
+        '422':
+          description: 'Request validation failed, stale orbital elements, or SGP4 propagation
+            error. Codes: VALIDATION_ERROR, STALE_ORBITAL_ELEMENTS, PROPAGATION_ERROR.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: 'Orbital elements could not be parsed from the upstream source. Code:
+            ORBITAL_ELEMENTS_ERROR.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: 'CelesTrak / SOCRATES source is unavailable. Code: SOURCE_UNAVAILABLE.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 'Unhandled orbit service failure. Code: ORBIT_SERVICE_ERROR.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     ConjunctionRequest:
@@ -365,6 +418,181 @@ components:
       required:
       - error
       title: ErrorResponse
+    EvaWindow:
+      properties:
+        start:
+          type: string
+          format: date-time
+          title: Start
+        end:
+          type: string
+          format: date-time
+          title: End
+        status:
+          type: string
+          enum:
+          - SAFE
+          - CAUTION
+          - REQUIRES_REVIEW
+          - INSUFFICIENT_DATA
+          title: Status
+        safety:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Safety
+        danger:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Danger
+        peak_danger:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Peak Danger
+        average_danger:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Average Danger
+        critical_overlap_seconds:
+          type: integer
+          title: Critical Overlap Seconds
+        adverse_duration_seconds:
+          type: integer
+          title: Adverse Duration Seconds
+        data_coverage:
+          type: number
+          title: Data Coverage
+        eva_min:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Eva Min
+        distance_min_km:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Distance Min Km
+        blocked:
+          type: boolean
+          title: Blocked
+        factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvaWindowFactor'
+          title: Factors
+        reasons:
+          type: array
+          items:
+            type: string
+          title: Reasons
+      additionalProperties: false
+      type: object
+      required:
+      - start
+      - end
+      - status
+      - safety
+      - danger
+      - peak_danger
+      - average_danger
+      - critical_overlap_seconds
+      - adverse_duration_seconds
+      - data_coverage
+      - blocked
+      - factors
+      - reasons
+      title: EvaWindow
+    EvaWindowFactor:
+      properties:
+        type:
+          type: string
+          enum:
+          - DEBRIS_PROXIMITY
+          title: Type
+        critical_overlap_seconds:
+          type: integer
+          title: Critical Overlap Seconds
+        minimum_distance_km:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Minimum Distance Km
+      additionalProperties: false
+      type: object
+      required:
+      - type
+      - critical_overlap_seconds
+      title: EvaWindowFactor
+    EvaWindowsRequest:
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          examples:
+          - '2026-09-20T03:30:00Z'
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+          examples:
+          - '2026-09-20T05:30:00Z'
+        duration_min:
+          type: integer
+          exclusiveMinimum: 0
+          title: Duration Min
+          examples:
+          - 30
+        step_min:
+          type: integer
+          exclusiveMinimum: 0
+          title: Step Min
+          default: 30
+        top_k:
+          type: integer
+          minimum: 2
+          title: Top K
+          default: 5
+        critical_distance_km:
+          type: number
+          exclusiveMinimum: 0.0
+          maximum: 5.0
+          title: Critical Distance Km
+          examples:
+          - 5.0
+      additionalProperties: false
+      type: object
+      required:
+      - start_time
+      - end_time
+      - duration_min
+      - critical_distance_km
+      title: EvaWindowsRequest
+    EvaWindowsResponse:
+      properties:
+        request:
+          $ref: '#/components/schemas/EvaWindowsRequest'
+        horizon_minutes:
+          type: integer
+          title: Horizon Minutes
+        windows:
+          items:
+            $ref: '#/components/schemas/EvaWindow'
+          type: array
+          title: Windows
+        data_quality:
+          $ref: '#/components/schemas/DataQuality'
+      additionalProperties: false
+      type: object
+      required:
+      - request
+      - horizon_minutes
+      - windows
+      - data_quality
+      title: EvaWindowsResponse
     HealthResponse:
       properties:
         status:

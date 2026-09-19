@@ -21,7 +21,6 @@ def fetch_iss_conjunctions(order="TCA", max_records=1000):
     Returns:
         Список словарей с данными о сближениях.
     """
-    url = "https://celestrak.org/SOCRATES/table-socrates.php"
     params = {
         "CATNR": "25544",       # NORAD ID МКС
         "ORDER": order,         # Сортировка
@@ -33,8 +32,20 @@ def fetch_iss_conjunctions(order="TCA", max_records=1000):
     }
 
     print(f"📡 Запрос к SOCRATES (CATNR=25544, ORDER={order})...")
-    resp = requests.get(url, params=params, headers=headers, timeout=30)
-    resp.raise_for_status()
+    resp = None
+    last_exc = None
+    for host in ("celestrak.org", "celestrak.com"):
+        url = f"https://{host}/SOCRATES/table-socrates.php"
+        try:
+            resp = requests.get(url, params=params, headers=headers, timeout=30)
+            resp.raise_for_status()
+            break
+        except requests.RequestException as exc:
+            last_exc = exc
+            print(f"⚠️  {host} недоступен: {exc}")
+            resp = None
+    if resp is None:
+        raise last_exc or RuntimeError("SOCRATES unavailable: no CelesTrak host responded")
 
     soup = BeautifulSoup(resp.text, "html.parser")
 

@@ -5,11 +5,14 @@ CosmoHACK Orbit API — FastAPI app.
 Endpoints:
   GET  /health
   POST /api/v1/orbits/positions
+  POST /api/v1/conjunctions/distances
+  POST /api/v1/eva/windows
 """
 
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import math
 import sys
@@ -25,10 +28,13 @@ from sgp4.api import jday, Satrec
 
 # ── resolve sibling imports ───────────────────────────────────────────────────
 _DIR = Path(__file__).resolve().parent
-if str(_DIR) not in sys.path:
-    sys.path.insert(0, str(_DIR))
+_ROOT = _DIR.parent
+for _p in (_DIR, _ROOT):
+    if str(_p) not in sys.path:
+        sys.path.insert(0, str(_p))
 
 from get_data import fetch_iss_conjunctions
+from merge_time_sections.rank import rank_eva_windows
 
 # ── optional orjson ───────────────────────────────────────────────────────────
 try:
@@ -42,7 +48,7 @@ except ImportError:
 from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 # ── logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -54,8 +60,10 @@ log = logging.getLogger("orbit_api")
 
 # ── constants ─────────────────────────────────────────────────────────────────
 ISS_NORAD = "25544"
-CELESTRAK_GP_URL = "https://celestrak.org/NORAD/elements/gp.php"
-CELESTRAK_SATCAT_URL = "https://celestrak.org/satcat/records.php"
+CELESTRAK_HOSTS = ("celestrak.org", "celestrak.com")
+CELESTRAK_GP_PATH = "/NORAD/elements/gp.php"
+CELESTRAK_SATCAT_PATH = "/satcat/records.php"
+SOCRATES_DUMP_PATH = _DIR / "iss_conjunctions.json"
 USER_AGENT = "Mozilla/5.0 (compatible; CosmoHACK-OrbitAPI/1.0)"
 SOCRATES_CACHE_TTL_SECONDS = 2 * 60 * 60
 ORBITAL_ELEMENTS_CACHE_TTL_SECONDS = 2 * 60 * 60
@@ -81,6 +89,10 @@ omm_cache: dict[str, dict] = {}
 
 # satcat_cache: {norad_id_str: {"record": dict | None, "retrieved_at": datetime}}
 satcat_cache: dict[str, dict] = {}
+
+# distances result cache for EVA ranking (not window cache)
+# key: (start_iso, end_iso, critical_distance_km, orbital_snapshot_id)
+_distances_bundle_cache: dict[tuple, dict] = {}
 
 cache_lock = asyncio.Lock()
 
@@ -112,6 +124,26 @@ class ConjunctionRequest(BaseModel):
     }}
 
 
+class EvaWindowsRequest(BaseModel):
+    start_time: str
+    end_time: str
+    duration_min: int = Field(..., gt=0)
+    step_min: int = Field(30, gt=0)
+    top_k: int = Field(5, ge=2)
+    critical_distance_km: float = Field(..., gt=0, le=5)
+
+    model_config = {"json_schema_extra": {
+        "example": {
+            "start_time": "2026-09-20T03:30:00Z",
+            "end_time": "2026-09-20T05:30:00Z",
+            "duration_min": 30,
+            "step_min": 30,
+            "top_k": 5,
+            "critical_distance_km": 5.0,
+        }
+    }}
+
+
 # ── FastAPI app ───────────────────────────────────────────────────────────────
 app = FastAPI(title="CosmoHACK Orbit API", version="1.0.0")
 app.add_middleware(GZipMiddleware, minimum_size=1024)
@@ -123,6 +155,35 @@ def _err(status: int, code: str, message: str, details: Any = None) -> JSONRespo
         status_code=status,
         content={"error": {"code": code, "message": message, "details": details}},
     )
+
+
+def _ok(payload: dict) -> JSONResponse:
+    if _HAS_ORJSON:
+        return _JSONResponse(content=payload)
+    return JSONResponse(content=payload)
+
+
+def _parse_time_window(raw_start: str, raw_end: str) -> tuple[datetime, datetime] | JSONResponse:
+    try:
+        start_time = datetime.fromisoformat(str(raw_start).replace("Z", "+00:00"))
+        end_time = datetime.fromisoformat(str(raw_end).replace("Z", "+00:00"))
+    except ValueError as exc:
+        return _err(422, "VALIDATION_ERROR", f"Invalid datetime format: {exc}")
+
+    if start_time.tzinfo is None or end_time.tzinfo is None:
+        return _err(422, "VALIDATION_ERROR",
+                    "start_time and end_time must include timezone information")
+
+    start_time = start_time.astimezone(timezone.utc)
+    end_time = end_time.astimezone(timezone.utc)
+
+    if end_time <= start_time:
+        return _err(422, "VALIDATION_ERROR", "end_time must be after start_time")
+
+    if (end_time - start_time).total_seconds() > 86400:
+        return _err(422, "VALIDATION_ERROR",
+                    "Requested window exceeds maximum of 24 hours")
+    return start_time, end_time
 
 
 # ── helpers: time formatting ──────────────────────────────────────────────────
@@ -153,13 +214,64 @@ def _parse_tca(tca_str: str) -> datetime | None:
         return None
 
 
+# ── CelesTrak HTTP ────────────────────────────────────────────────────────────
+
+async def _celestrak_get(
+    client: httpx.AsyncClient,
+    path: str,
+    params: dict,
+) -> httpx.Response:
+    last_exc: Exception | None = None
+    for host in CELESTRAK_HOSTS:
+        url = f"https://{host}{path}"
+        try:
+            return await client.get(url, params=params)
+        except httpx.TransportError as exc:
+            last_exc = exc
+            log.warning("CelesTrak transport error %s: %s", url, exc)
+    assert last_exc is not None
+    raise last_exc
+
+
 # ── SOCRATES cache ────────────────────────────────────────────────────────────
+
+def _read_socrates_dump() -> tuple[list[dict], datetime] | None:
+    try:
+        raw = json.loads(SOCRATES_DUMP_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+        log.warning("SOCRATES dump unreadable: %s", exc)
+        return None
+    events = raw.get("events")
+    if not isinstance(events, list):
+        return None
+    fetched_at = _parse_tca(str(raw.get("fetched_at") or ""))
+    if fetched_at is None:
+        fetched_at = datetime.now(timezone.utc)
+    return events, fetched_at
+
+
+def _write_socrates_dump(events: list[dict], retrieved_at: datetime) -> None:
+    payload = {
+        "fetched_at": retrieved_at.isoformat(),
+        "source": "CelesTrak SOCRATES Plus",
+        "url": "https://celestrak.org/SOCRATES/table-socrates.php?CATNR=25544",
+        "count": len(events),
+        "events": events,
+    }
+    try:
+        SOCRATES_DUMP_PATH.write_text(
+            json.dumps(payload, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    except OSError as exc:
+        log.warning("SOCRATES dump not saved: %s", exc)
+
 
 async def _get_socrates_events() -> tuple[list[dict], datetime]:
     """
     Return (events, retrieved_at).
     Uses in-memory cache with SOCRATES_CACHE_TTL_SECONDS TTL.
-    Falls back to stale cache on error with a warning.
+    Falls back to stale cache, then local dump, on error.
     Raises RuntimeError when no data at all is available.
     """
     now = datetime.now(timezone.utc)
@@ -187,11 +299,23 @@ async def _get_socrates_events() -> tuple[list[dict], datetime]:
                 e["other_norad"] for e in events if e.get("other_norad")
             ))
             log.info("SOCRATES fetched: %d events, %d unique candidates", len(events), unique_count)
+            _write_socrates_dump(events, now)
             return events, now
         except Exception as exc:
             if cached_events is not None:
                 log.warning("SOCRATES stale cache used (fetch failed: %s, age %.0fs)", exc, age)
                 return cached_events, cached_at
+            dump = _read_socrates_dump()
+            if dump is not None:
+                events, retrieved_at = dump
+                socrates_cache["events"] = events
+                socrates_cache["retrieved_at"] = retrieved_at
+                dump_age = (now - retrieved_at).total_seconds()
+                log.warning(
+                    "SOCRATES dump used (fetch failed: %s, dump age %.0fs, %d events)",
+                    exc, dump_age, len(events),
+                )
+                return events, retrieved_at
             raise RuntimeError(f"SOCRATES unavailable: {exc}") from exc
 
 
@@ -207,8 +331,9 @@ async def _fetch_one_omm(
 ) -> dict:
     """Fetch OMM JSON from CelesTrak GP, build Satrec, return cache entry."""
     async with sem:
-        resp = await client.get(
-            CELESTRAK_GP_URL,
+        resp = await _celestrak_get(
+            client,
+            CELESTRAK_GP_PATH,
             params={"CATNR": norad_id, "FORMAT": "json"},
         )
         resp.raise_for_status()
@@ -334,8 +459,9 @@ async def _fetch_one_satcat(
     sem: asyncio.Semaphore,
 ) -> dict | None:
     async with sem:
-        resp = await client.get(
-            CELESTRAK_SATCAT_URL,
+        resp = await _celestrak_get(
+            client,
+            CELESTRAK_SATCAT_PATH,
             params={"CATNR": norad_id, "FORMAT": "json"},
         )
         resp.raise_for_status()
@@ -838,35 +964,16 @@ def _union_duration_seconds(
     return sum(int((e - s).total_seconds()) for s, e in merged)
 
 
-# ── distances endpoint ────────────────────────────────────────────────────────
+# ── distances computation (shared by /distances and /eva/windows) ─────────────
 
-@app.post("/api/v1/conjunctions/distances")
-async def distances(body: ConjunctionRequest):
+async def _compute_distances(
+    start_time: datetime,
+    end_time: datetime,
+    critical_km: float | None,
+) -> dict | JSONResponse:
     t_total_start = time.monotonic()
-
-    # ── 1. Validate request ───────────────────────────────────────────────────
-    try:
-        start_time = datetime.fromisoformat(str(body.start_time).replace("Z", "+00:00"))
-        end_time   = datetime.fromisoformat(str(body.end_time).replace("Z", "+00:00"))
-    except ValueError as exc:
-        return _err(422, "VALIDATION_ERROR", f"Invalid datetime format: {exc}")
-
-    if start_time.tzinfo is None or end_time.tzinfo is None:
-        return _err(422, "VALIDATION_ERROR",
-                    "start_time and end_time must include timezone information")
-
-    start_time = start_time.astimezone(timezone.utc)
-    end_time   = end_time.astimezone(timezone.utc)
-
-    if end_time <= start_time:
-        return _err(422, "VALIDATION_ERROR", "end_time must be after start_time")
-
     duration_seconds = (end_time - start_time).total_seconds()
-    if duration_seconds > 86400:
-        return _err(422, "VALIDATION_ERROR",
-                    "Requested window exceeds maximum of 24 hours")
 
-    critical_km = body.critical_distance_km
     if critical_km is not None and critical_km <= 0:
         return _err(422, "VALIDATION_ERROR", "critical_distance_km must be > 0")
 
@@ -1260,21 +1367,195 @@ async def distances(body: ConjunctionRequest):
         dq_status,
     )
 
-    if _HAS_ORJSON:
-        return _JSONResponse(content=response_body)
-    return JSONResponse(content=response_body)
+    return response_body
+
+
+def _orbital_snapshot_id() -> str:
+    s_at = socrates_cache.get("retrieved_at")
+    s_part = s_at.isoformat() if s_at else "none"
+    omm_parts = []
+    for nid in sorted(omm_cache):
+        retrieved = omm_cache[nid].get("retrieved_at")
+        omm_parts.append(f"{nid}:{retrieved.isoformat() if retrieved else 'none'}")
+    return f"{s_part}|{'|'.join(omm_parts)}"
+
+
+def _socrates_is_stale() -> bool:
+    retrieved = socrates_cache.get("retrieved_at")
+    if retrieved is None:
+        return False
+    age = (datetime.now(timezone.utc) - retrieved).total_seconds()
+    return age >= SOCRATES_CACHE_TTL_SECONDS
+
+
+async def _cached_compute_distances(
+    start_time: datetime,
+    end_time: datetime,
+    critical_km: float,
+) -> tuple[dict, bool, bool] | JSONResponse:
+    """Return (bundle, cache_hit, stale_orbit) or an error JSONResponse."""
+    start_iso = _iso(start_time)
+    end_iso = _iso(end_time)
+    crit = float(critical_km)
+    async with cache_lock:
+        key = (start_iso, end_iso, crit, _orbital_snapshot_id())
+        cached = _distances_bundle_cache.get(key)
+    if cached is not None:
+        log.info("[eva/windows] distances cache hit — skip SGP4")
+        return cached, True, _socrates_is_stale()
+
+    log.info("[eva/windows] distances cache miss — computing")
+    result = await _compute_distances(start_time, end_time, critical_km)
+    if isinstance(result, JSONResponse):
+        return result
+
+    async with cache_lock:
+        key = (start_iso, end_iso, crit, _orbital_snapshot_id())
+        _distances_bundle_cache[key] = result
+    return result, False, _socrates_is_stale()
+
+
+@app.post("/api/v1/conjunctions/distances")
+async def distances(body: ConjunctionRequest):
+    parsed = _parse_time_window(body.start_time, body.end_time)
+    if isinstance(parsed, JSONResponse):
+        return parsed
+    start_time, end_time = parsed
+    result = await _compute_distances(start_time, end_time, body.critical_distance_km)
+    if isinstance(result, JSONResponse):
+        return result
+    return _ok(result)
+
+
+@app.post("/api/v1/eva/windows")
+async def eva_windows(body: EvaWindowsRequest):
+    parsed = _parse_time_window(body.start_time, body.end_time)
+    if isinstance(parsed, JSONResponse):
+        return parsed
+    start_time, end_time = parsed
+
+    if body.duration_min <= 0:
+        return _err(422, "VALIDATION_ERROR", "duration_min must be > 0")
+    if body.step_min <= 0:
+        return _err(422, "VALIDATION_ERROR", "step_min must be > 0")
+    if body.top_k < 2:
+        return _err(422, "VALIDATION_ERROR", "top_k must be >= 2")
+    if body.critical_distance_km <= 0 or body.critical_distance_km > 5:
+        return _err(
+            422,
+            "VALIDATION_ERROR",
+            "critical_distance_km must be > 0 and <= 5",
+        )
+
+    horizon_min = int((end_time - start_time).total_seconds() // 60)
+    if body.duration_min > horizon_min:
+        return _err(
+            422,
+            "VALIDATION_ERROR",
+            f"duration_min ({body.duration_min}) exceeds request horizon ({horizon_min} minutes)",
+        )
+
+    last_start = horizon_min - body.duration_min
+    n_starts = len(range(0, last_start + 1, body.step_min)) if last_start >= 0 else 0
+    if n_starts < 2:
+        return _err(
+            422,
+            "VALIDATION_ERROR",
+            "Заданный горизонт, длительность и шаг не позволяют сравнить два окна одинаковой длительности.",
+        )
+
+    result = await _cached_compute_distances(
+        start_time, end_time, body.critical_distance_km,
+    )
+    if isinstance(result, JSONResponse):
+        return result
+    distance_bundle, cache_hit, stale_orbit = result
+
+    bundle = {
+        "start": _iso(start_time),
+        "end": _iso(end_time),
+        "weather": {"records": []},
+        "distances": distance_bundle,
+    }
+    try:
+        ranked = rank_eva_windows(
+            bundle,
+            d=body.duration_min,
+            step_min=body.step_min,
+            top_k=body.top_k,
+            d_crit_km=body.critical_distance_km,
+        )
+    except ValueError as exc:
+        return _err(422, "VALIDATION_ERROR", str(exc))
+
+    dq_src = distance_bundle.get("data_quality") or {}
+    warnings = list(dq_src.get("warnings") or [])
+    warnings.append("Погодные факторы пока не участвовали в расчёте.")
+    if ranked.get("unknown_minutes"):
+        warnings.append("Часть минут горизонта имеет неизвестные расстояния.")
+    if stale_orbit:
+        warnings.append("Использован устаревший кеш орбитальных данных.")
+    if dq_src.get("status") == "NO_CANDIDATES" or ranked.get("no_candidates"):
+        warnings.append(
+            "SOCRATES не обнаружил отслеживаемых сближений в пределах области скрининга. "
+            "Это не абсолютная гарантия безопасности."
+        )
+    if ranked.get("safe_count", 0) < 2:
+        warnings.append(
+            "Невозможно сформировать несколько полностью безопасных окон заданной длительности."
+        )
+    if ranked.get("safe_count", 0) == 0:
+        warnings.append(
+            "Полностью безопасные окна заданной длительности не найдены. "
+            "Все предложенные варианты требуют дополнительной проверки."
+        )
+    elif ranked.get("windows") and all(
+        w.get("status") in {"REQUIRES_REVIEW", "INSUFFICIENT_DATA", "CAUTION"}
+        for w in ranked["windows"]
+    ):
+        warnings.append("Все доступные варианты требуют проверки.")
+
+    dq = {
+        "status": dq_src.get("status"),
+        "warnings": warnings,
+        "elements_epoch": dq_src.get("elements_epoch"),
+        "calculated_at": dq_src.get("calculated_at"),
+    }
+    payload = {
+        "request": {
+            "start_time": _iso(start_time),
+            "end_time": _iso(end_time),
+            "duration_min": body.duration_min,
+            "step_min": body.step_min,
+            "top_k": body.top_k,
+            "critical_distance_km": body.critical_distance_km,
+        },
+        "horizon_minutes": ranked["n"],
+        "windows": ranked["windows"],
+        "data_quality": dq,
+    }
+    log.info(
+        "[eva/windows] duration=%d step=%d top_k=%d returned=%d horizon=%d "
+        "safe=%d cache_hit=%s status=%s",
+        body.duration_min, body.step_min, body.top_k,
+        len(ranked["windows"]), ranked["n"],
+        ranked.get("safe_count", 0), cache_hit,
+        dq.get("status"),
+    )
+    return _ok(payload)
 
 
 # ── cache invalidation (для будущего механизма принудительного обновления) ────
 
 async def invalidate_orbit_caches() -> None:
-    """Clear SOCRATES, OMM/SGP4 and SATCAT in-memory caches."""
+    """Clear SOCRATES, OMM/SGP4, SATCAT and distances-bundle in-memory caches."""
     async with cache_lock:
         socrates_cache["events"] = None
         socrates_cache["retrieved_at"] = None
         omm_cache.clear()
         satcat_cache.clear()
-    log.info("Orbit caches invalidated (SOCRATES + OMM + SATCAT)")
+        _distances_bundle_cache.clear()
+    log.info("Orbit caches invalidated (SOCRATES + OMM + SATCAT + distances)")
 
 
 # ── entry point ───────────────────────────────────────────────────────────────
