@@ -1,0 +1,10 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+*.json
+Dockerfile
+.dockerignore
+*.md
+.idea
