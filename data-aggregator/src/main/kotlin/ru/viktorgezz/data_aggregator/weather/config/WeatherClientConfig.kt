@@ -1,19 +1,19 @@
-package ru.viktorgezz.data_aggregator.orbit.config
+package ru.viktorgezz.data_aggregator.weather.config
 
 import okhttp3.OkHttpClient
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import ru.viktorgezz.data_aggregator.orbit.client.OrbitApiClient
+import ru.viktorgezz.data_aggregator.weather.client.WeatherApiClient
 import tools.jackson.databind.json.JsonMapper
 import java.util.concurrent.TimeUnit
 
 @Configuration
-@EnableConfigurationProperties(OrbitClientProperties::class)
-class OrbitClientConfig {
+@EnableConfigurationProperties(WeatherClientProperties::class)
+class WeatherClientConfig {
 
     @Bean
-    fun orbitOkHttpClient(properties: OrbitClientProperties): OkHttpClient =
+    fun weatherOkHttpClient(properties: WeatherClientProperties): OkHttpClient =
         OkHttpClient.Builder()
             .connectTimeout(properties.connectTimeoutSecond, TimeUnit.SECONDS)
             .readTimeout(properties.readTimeoutSecond, TimeUnit.SECONDS)
@@ -21,11 +21,11 @@ class OrbitClientConfig {
             .build()
 
     @Bean
-    fun orbitApiClient(
+    fun weatherApiClient(
         jsonMapper: JsonMapper,
-        properties: OrbitClientProperties,
-    ): OrbitApiClient = OrbitApiClient(
-        okHttpClient = orbitOkHttpClient(properties),
+        properties: WeatherClientProperties,
+    ): WeatherApiClient = WeatherApiClient(
+        okHttpClient = weatherOkHttpClient(properties),
         jsonMapper = jsonMapper,
         properties = properties
     )

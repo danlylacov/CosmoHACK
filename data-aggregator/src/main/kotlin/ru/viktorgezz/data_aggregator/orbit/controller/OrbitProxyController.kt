@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import ru.viktorgezz.data_aggregator.common.UpstreamResult
+import ru.viktorgezz.data_aggregator.common.toResponseEntity
 import ru.viktorgezz.data_aggregator.orbit.client.OrbitApiClient
 import ru.viktorgezz.data_aggregator.orbit.dto.ConjunctionRequest
 import ru.viktorgezz.data_aggregator.orbit.dto.ConjunctionResponse
@@ -55,9 +55,4 @@ class OrbitProxyController(private val client: OrbitApiClient) {
     @PostMapping("/conjunctions/distances")
     fun conjunctionDistances(@RequestBody request: ConjunctionRequest): ResponseEntity<Any> =
         client.conjunctionDistances(request).toResponseEntity()
-
-    private fun <T> UpstreamResult<T>.toResponseEntity(): ResponseEntity<Any> = when (this) {
-        is UpstreamResult.Success -> ResponseEntity.status(status).body(body)
-        is UpstreamResult.Failure -> ResponseEntity.status(status).body(error)
-    }
 }

@@ -1,0 +1,240 @@
+openapi: 3.1.0
+info:
+  title: CosmoHACK Space Weather
+  version: 0.1.0
+  description: |
+    Один эндпоинт по данным `data_agregate`: космическая погода на интервале
+    и коэффициент, можно ли выходить в открытый космос (EVA).
+
+    `eva_coefficient` ∈ [0, 1]: **1** — спокойно, выход допустим; **0** — выход
+    не рекомендуется. Берётся минимум из трёх факторов NOAA:
+
+    - геомагнитный: `gfz_Hp30` (иначе `gfz_Kp`); 3 → 1.0, 9 → 0.0
+    - протоны ≥10 МэВ (S-шкала); 1 pfu → 1.0, 10⁴ pfu → 0.0
+    - электроны ≥2 МэВ; 100 pfu → 1.0, 10⁵ pfu → 0.0
+
+    Шаг рядов — 30 минут. Источник: `data_agregate/output/space_weather.csv`.
+  contact:
+    name: CosmoHACK
+
+servers:
+  - url: http://127.0.0.1:8000
+    description: локально
+
+paths:
+  /space-weather:
+    get:
+      operationId: getSpaceWeather
+      summary: Погода и коэффициент EVA на интервале
+      description: |
+        На вход — UTC-интервал (`start`, `end`).
+        На выход — точки с временем, всеми параметрами CSV и `eva_coefficient`.
+      parameters:
+        - name: start
+          in: query
+          required: true
+          description: Начало интервала (UTC, ISO 8601).
+          schema:
+            type: string
+            format: date-time
+          example: "2026-09-18T10:00:00Z"
+        - name: end
+          in: query
+          required: true
+          description: Конец интервала (UTC, ISO 8601), включительно.
+          schema:
+            type: string
+            format: date-time
+          example: "2026-09-18T18:00:00Z"
+      responses:
+        "200":
+          description: Ряды на запрошенном интервале.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpaceWeatherResponse"
+              example:
+                start: "2026-09-18T10:00:00Z"
+                end: "2026-09-18T12:00:00Z"
+                interval_minutes: 30
+                eva_coefficient: 0.917
+                records:
+                  - time: "2026-09-18T10:30:00Z"
+                    eva_coefficient: 0.917
+                    parameters:
+                      gfz_Hp30: 1.667
+                      gfz_Kp: null
+                      gfz_ap30: 6.0
+                      swpc_mpsh_integral_electrons_g19_0_ge2_MeV: 334.9
+                      swpc_sgps_integral_protons_g19_0_ge10_MeV: 0.229
+        "400":
+          description: Некорректный интервал (`start` ≥ `end`).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: CSV с данными не найден.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    SpaceWeatherResponse:
+      type: object
+      required: [start, end, interval_minutes, eva_coefficient, records]
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: Фактическое начало выборки (как в запросе).
+        end:
+          type: string
+          format: date-time
+          description: Фактический конец выборки (как в запросе).
+        interval_minutes:
+          type: integer
+          example: 30
+        eva_coefficient:
+          type: [number, "null"]
+          minimum: 0
+          maximum: 1
+          description: Минимум `eva_coefficient` по точкам интервала (худший случай).
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/SpaceWeatherRecord"
+
+    SpaceWeatherRecord:
+      type: object
+      required: [time, eva_coefficient, parameters]
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: Начало 30-минутного бина, UTC.
+        eva_coefficient:
+          type: [number, "null"]
+          minimum: 0
+          maximum: 1
+          description: Можно ли выходить в космос в этот бин (1 — да, 0 — нет).
+        parameters:
+          $ref: "#/components/schemas/SpaceWeatherParameters"
+
+    SpaceWeatherParameters:
+      type: object
+      additionalProperties: true
+      description: |
+        Все колонки CSV, кроме `time`. Префикс спутника (`g18`/`g19`) зависит от года.
+        Дифференциальные потоки — (см² с ср кэВ)⁻¹, интегральные — (см² с ср)⁻¹.
+      properties:
+        gfz_Hp30:
+          type: [number, "null"]
+          description: Hpo 30 мин, шкала как Kp (0…9+)
+        gfz_Kp:
+          type: [number, "null"]
+          description: Классический Kp, 3 ч
+        gfz_Kp_status:
+          type: [string, "null"]
+          description: nowcast / def
+        gfz_ap30:
+          type: [number, "null"]
+          description: Линейный эквивалент Hp30, нТл
+        swpc_mpsh_differential_electrons_g19_0_79_keV:
+          type: [number, "null"]
+        swpc_mpsh_differential_electrons_g19_0_134_keV:
+          type: [number, "null"]
+        swpc_mpsh_differential_electrons_g19_0_186_keV:
+          type: [number, "null"]
+        swpc_mpsh_differential_electrons_g19_0_271_keV:
+          type: [number, "null"]
+        swpc_mpsh_differential_electrons_g19_0_378_keV:
+          type: [number, "null"]
+        swpc_mpsh_differential_electrons_g19_0_548_keV:
+          type: [number, "null"]
+        swpc_mpsh_differential_electrons_g19_0_865_keV:
+          type: [number, "null"]
+        swpc_mpsh_differential_electrons_g19_0_1509_keV:
+          type: [number, "null"]
+        swpc_mpsh_differential_electrons_g19_0_2205_keV:
+          type: [number, "null"]
+        swpc_mpsh_differential_electrons_g19_0_2894_keV:
+          type: [number, "null"]
+        swpc_mpsh_integral_electrons_g19_0_ge2_MeV:
+          type: [number, "null"]
+          description: Интегральные электроны ≥2 МэВ
+        swpc_sgps_differential_protons_g19_0_P1:
+          type: [number, "null"]
+          description: 1.02–1.86 МэВ
+        swpc_sgps_differential_protons_g19_0_P2A:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P2B:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P3:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P4:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P5:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P6:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P7:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P8A:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P8B:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P8C:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P9:
+          type: [number, "null"]
+        swpc_sgps_differential_protons_g19_0_P10:
+          type: [number, "null"]
+        swpc_sgps_integral_protons_g19_0_ge1_MeV:
+          type: [number, "null"]
+        swpc_sgps_integral_protons_g19_0_ge5_MeV:
+          type: [number, "null"]
+        swpc_sgps_integral_protons_g19_0_ge10_MeV:
+          type: [number, "null"]
+          description: Интегральные протоны ≥10 МэВ (NOAA S-шкала)
+        swpc_sgps_integral_protons_g19_0_ge30_MeV:
+          type: [number, "null"]
+        swpc_sgps_integral_protons_g19_0_ge50_MeV:
+          type: [number, "null"]
+        swpc_sgps_integral_protons_g19_0_ge60_MeV:
+          type: [number, "null"]
+        swpc_sgps_integral_protons_g19_0_ge100_MeV:
+          type: [number, "null"]
+        swpc_sgps_integral_protons_g19_0_ge500_MeV:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A1:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A2A:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A2B:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A3:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A4:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A5:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A6:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A7:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A9:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A10:
+          type: [number, "null"]
+        swpc_sgps_differential_alphas_g19_0_A11:
+          type: [number, "null"]
+
+    Error:
+      type: object
+      required: [detail]
+      properties:
+        detail:
+          type: string

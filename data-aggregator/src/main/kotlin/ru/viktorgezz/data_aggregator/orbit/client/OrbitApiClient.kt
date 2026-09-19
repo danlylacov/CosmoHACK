@@ -22,13 +22,13 @@ class OrbitApiClient(
     private val properties: OrbitClientProperties,
 ) {
 
-    fun health(): UpstreamResult<HealthResponse> =
+    fun health(): UpstreamResult<HealthResponse, ErrorResponse> =
         execute(Request.Builder().url(properties.urlHealth.toHttpUrl()).get().build(), HealthResponse::class.java)
 
-    fun positions(request: PositionsRequest): UpstreamResult<PositionsResponse> =
+    fun positions(request: PositionsRequest): UpstreamResult<PositionsResponse, ErrorResponse> =
         execute(postRequest(properties.urlPositions.toHttpUrl(), request), PositionsResponse::class.java)
 
-    fun conjunctionDistances(request: ConjunctionRequest): UpstreamResult<ConjunctionResponse> =
+    fun conjunctionDistances(request: ConjunctionRequest): UpstreamResult<ConjunctionResponse, ErrorResponse> =
         execute(postRequest(properties.urlDistances.toHttpUrl(), request), ConjunctionResponse::class.java)
 
     private fun postRequest(url: HttpUrl, body: Any): Request =
@@ -37,7 +37,7 @@ class OrbitApiClient(
             .post(jsonMapper.writeValueAsBytes(body).toRequestBody(JSON_MEDIA_TYPE))
             .build()
 
-    private fun <T> execute(request: Request, responseType: Class<T>): UpstreamResult<T> {
+    private fun <T> execute(request: Request, responseType: Class<T>): UpstreamResult<T, ErrorResponse> {
         try {
             okHttpClient.newCall(request).execute().use { response ->
                 val bodyBytes = response.body?.bytes() ?: ByteArray(0)
