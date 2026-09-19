@@ -10,7 +10,7 @@ import json
 from datetime import datetime, timezone
 
 
-def fetch_iss_conjunctions(order="MINRANGE", max_records=25):
+def fetch_iss_conjunctions(order="TCA", max_records=1000):
     """
     Запрашивает сближения МКС с CelesTrak SOCRATES.
 
@@ -98,7 +98,7 @@ def fetch_iss_conjunctions(order="MINRANGE", max_records=25):
 
 
 if __name__ == "__main__":
-    events = fetch_iss_conjunctions(order="MINRANGE", max_records=25)
+    events = fetch_iss_conjunctions(order="TCA", max_records=1000)
 
     print(f"\n✅ Найдено сближений МКС: {len(events)}\n")
     print(f"{'TCA (UTC)':<26} {'NORAD':<10} {'Название':<20} "

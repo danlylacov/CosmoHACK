@@ -156,9 +156,9 @@ components:
           title: End Time
         step_seconds:
           type: integer
-          const: 1
+          const: 60
           title: Step Seconds
-          default: 1
+          default: 60
         critical_distance_km:
           anyOf:
           - type: number
