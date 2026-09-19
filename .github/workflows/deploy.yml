@@ -1,0 +1,40 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+
+            cd /opt/my-app
+
+            echo "Updating source code..."
+            git fetch origin master
+            git reset --hard origin/master
+
+            echo "Building Docker images..."
+            docker compose build
+
+            echo "Starting application..."
+            docker compose up -d
+
+            echo "Removing unused images..."
+            docker image prune -f
+
+            echo "Checking containers..."
+            docker compose ps
+
+            echo "Deployment completed"

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: data-aggregator
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: false
+      fail-on-ignored-properties: false
+      use-big-decimal-for-floats: true
+      accept-empty-string-as-null-object: true
+    default-property-inclusion: non_null
+
+logging:
+  level:
+    ru.viktorgezz: DEBUG
+
+server:
+  port: 8088
+  servlet:
+    context-path: /ch/${spring.application.name}
+
+springdoc:
+  api-docs:
+    version: openapi_3_0
