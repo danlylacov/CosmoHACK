@@ -36,7 +36,7 @@ data class ObjectState(
 data class PositionSample(
     @JsonProperty("timestamp") val timestamp: OffsetDateTime,
     @JsonProperty("iss") val iss: IssState,
-    @JsonProperty("nearest_object") val nearestObject: ObjectState? = null,
+    @JsonProperty("screened_objects") val screenedObjects: List<ObjectState> = emptyList(),
 )
 
 data class PositionsResponse(

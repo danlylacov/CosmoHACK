@@ -52,6 +52,18 @@ data class ErrorResponse(
     @JsonProperty("error") val error: ErrorBody,
 )
 
+data class ValidationError(
+    @JsonProperty("loc") val loc: List<Any>,
+    @JsonProperty("msg") val msg: String,
+    @JsonProperty("type") val type: String,
+    @JsonProperty("input") val input: Any? = null,
+    @JsonProperty("ctx") val ctx: Map<String, Any?>? = null,
+)
+
+data class HTTPValidationError(
+    @JsonProperty("detail") val detail: List<ValidationError> = emptyList(),
+)
+
 data class HealthResponse(
     @JsonProperty("status") val status: String = "ok",
 )
