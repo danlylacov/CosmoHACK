@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "Источник NOAA SWPC недоступен. Расчёт risk_sw не выполнен.",
+  "code": "SOURCE_UNAVAILABLE",
+  "algorithm_version": "eva-risk-0.9.2"
+}

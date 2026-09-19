@@ -75,3 +75,9 @@ htmlcov/
 
 # Package managers
 .pdm-python
+
+node_modules
+dist
+.DS_Store
+*.local
+
