@@ -16,21 +16,26 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          command_timeout: 40m
+          command_timeout: 15m
           script: |
-            set -e
+            set -eux
+            export GIT_TERMINAL_PROMPT=0
+            export DEBIAN_FRONTEND=noninteractive
 
             cd /opt/my-app/CosmoHACK
 
+            echo "Down..."
+            docker compose down
+
             echo "Updating source code..."
-            git fetch origin main
+            timeout 60 git fetch origin main
             git reset --hard origin/main
 
             echo "Building Docker images..."
-            docker compose build
+            timeout 600 docker compose build --progress=plain
 
             echo "Starting application..."
-            docker compose up -d
+            timeout 120 docker compose up -d --wait --wait-timeout 60
 
             echo "Removing unused images..."
             docker image prune -f
