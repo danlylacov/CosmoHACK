@@ -49,9 +49,10 @@ COPY models ./models
 COPY data ./data
 
 RUN mkdir -p /app/data/datasets \
+    && cp -a /app/data/datasets /opt/bundled-datasets \
     && ln -s /opt/venv /app/data/tools/space_weather_downloader/.venv \
-    && chmod +x /app/data/run.sh /app/data/tools/*/run.sh \
-    && chown -R appuser:appuser /app/data/datasets
+    && chmod +x /app/api/entrypoint.sh /app/data/run.sh /app/data/tools/*/run.sh \
+    && chown -R appuser:appuser /app/data/datasets /opt/bundled-datasets
 
 USER appuser
 
@@ -60,4 +61,5 @@ EXPOSE 8002
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health', timeout=3)"
 
+ENTRYPOINT ["/app/api/entrypoint.sh"]
 CMD ["uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", "8002"]

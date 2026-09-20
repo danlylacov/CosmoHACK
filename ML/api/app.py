@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """HTTP wrapper around SEPNET-SGR inference.
 
-Each POST /forecast first refreshes the CSV dataset via data/run.sh (origin day
-plus 72 hours of history), then calls models.sepnet_sgr.infer.forecast.
+Uses the bundled CSV dataset when it is already present. data/run.sh runs only
+if results.csv is missing, or when SEPNET_FORCE_DOWNLOAD=1.
 Does not write model output files and does not change model code.
 
 Run (from ML/):
@@ -122,6 +122,26 @@ def _dataset_dir(data: Path) -> Path:
     return data.parent if data.suffix else data
 
 
+def _dataset_csv(data: Path) -> Path:
+    if data.suffix.lower() == ".csv":
+        return data
+    return _dataset_dir(data) / "results.csv"
+
+
+def _dataset_ready(data: Path) -> bool:
+    csv_path = _dataset_csv(data)
+    try:
+        return csv_path.is_file() and csv_path.stat().st_size > 0
+    except OSError:
+        return False
+
+
+def _should_refresh(data: Path) -> bool:
+    if os.environ.get("SEPNET_FORCE_DOWNLOAD", "").lower() in {"1", "true", "yes"}:
+        return True
+    return not _dataset_ready(data)
+
+
 def _refresh_dataset(origin: str, data: Path) -> JSONResponse | None:
     """Pull the origin day plus 72h of history into the dataset used by forecast()."""
     try:
@@ -188,9 +208,12 @@ async def post_forecast(body: ForecastRequest):
         body.origin, body.cutoff, checkpoint, data, policy,
     )
     async with _infer_lock:
-        error = await asyncio.to_thread(_refresh_dataset, body.origin, data)
-        if error is not None:
-            return error
+        if _should_refresh(data):
+            error = await asyncio.to_thread(_refresh_dataset, body.origin, data)
+            if error is not None:
+                return error
+        else:
+            log.info("[forecast] using existing dataset %s", _dataset_csv(data))
         error = _missing(data, "data", directory_ok=True)
         if error is not None:
             return error

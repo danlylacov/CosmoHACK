@@ -4,7 +4,6 @@
 **/.DS_Store
 **/.pytest_cache/
 hack/
-data/datasets/
 models/**/output/
 models/**/data/
 models/**/artifacts/smoke/
