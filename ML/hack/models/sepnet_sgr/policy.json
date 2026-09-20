@@ -1,0 +1,11 @@
+{
+  "version": "space-weather-sgr-research-v1",
+  "block_s": 1,
+  "block_g": 1,
+  "block_r": 1,
+  "threshold_rationale": "Research project setting: block at any estimated S1/G1/R1 or above. NOAA scale categories are not official EVA authorization criteria.",
+  "min_history_fraction": 0.8,
+  "max_age_minutes": 60,
+  "kp_max_age_minutes": 240,
+  "kp_to_g_method": "Explicit lower bounds 14/3, 17/3, 20/3, 23/3, 9 following NOAA forecast third-scale labels; direct comparison for continuous forecasts, no rounding. Kp outside [0,9] is invalid."
+}

@@ -1,0 +1,1605 @@
+[
+  {
+    "model": "lstm",
+    "variant": "all",
+    "features": 172,
+    "best_epoch": 9,
+    "validation_loss": 0.009693057968316576,
+    "validation_mae": {
+      "0-6h": {
+        "lstm_mae_pfu": 0.022390935570001602,
+        "persistence_mae_pfu": 0.02047186903655529,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.022390935570001602,
+          "persistence_mae_pfu": 0.02047186903655529
+        }
+      },
+      "6-12h": {
+        "lstm_mae_pfu": 0.02907976321876049,
+        "persistence_mae_pfu": 0.02688559703528881,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.02907976321876049,
+          "persistence_mae_pfu": 0.02688559703528881
+        }
+      },
+      "12-24h": {
+        "lstm_mae_pfu": 0.035163216292858124,
+        "persistence_mae_pfu": 0.03097432292997837,
+        "compared_values": 170640,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 170640,
+          "model_mae_pfu": 0.035163216292858124,
+          "persistence_mae_pfu": 0.03097432292997837
+        }
+      },
+      "24-32h": {
+        "lstm_mae_pfu": 0.042148422449827194,
+        "persistence_mae_pfu": 0.033295489847660065,
+        "compared_values": 113760,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 113760,
+          "model_mae_pfu": 0.042148422449827194,
+          "persistence_mae_pfu": 0.033295489847660065
+        }
+      }
+    },
+    "test_mae": {
+      "0-6h": {
+        "lstm_mae_pfu": 0.048137590289115906,
+        "persistence_mae_pfu": 0.04863366484642029,
+        "compared_values": 1356,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1356,
+          "model_mae_pfu": 0.048137590289115906,
+          "persistence_mae_pfu": 0.04863366484642029
+        }
+      },
+      "6-12h": {
+        "lstm_mae_pfu": 0.23228052258491516,
+        "persistence_mae_pfu": 0.24087664484977722,
+        "compared_values": 1356,
+        "event": {
+          "values": 42,
+          "model_mae_pfu": 4.336956024169922,
+          "persistence_mae_pfu": 4.341432094573975
+        },
+        "quiet": {
+          "values": 1314,
+          "model_mae_pfu": 0.10108088701963425,
+          "persistence_mae_pfu": 0.10980865359306335
+        }
+      },
+      "12-24h": {
+        "lstm_mae_pfu": 0.1980220079421997,
+        "persistence_mae_pfu": 0.21471922099590302,
+        "compared_values": 2736,
+        "event": {
+          "values": 24,
+          "model_mae_pfu": 3.3489444255828857,
+          "persistence_mae_pfu": 3.35661244392395
+        },
+        "quiet": {
+          "values": 2712,
+          "model_mae_pfu": 0.17013771831989288,
+          "persistence_mae_pfu": 0.18691486120224
+        }
+      },
+      "24-32h": {
+        "lstm_mae_pfu": 0.19303101301193237,
+        "persistence_mae_pfu": 0.21812589466571808,
+        "compared_values": 1824,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1824,
+          "model_mae_pfu": 0.19303101301193237,
+          "persistence_mae_pfu": 0.21812589466571808
+        }
+      }
+    },
+    "probabilities": [
+      {
+        "start_hour": 0.0,
+        "end_hour": 6.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.08223507553339005,
+          0.15016776323318481,
+          0.007792727090418339,
+          0.021490277722477913,
+          0.007419531233608723,
+          0.01972014643251896
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      },
+      {
+        "start_hour": 6.0,
+        "end_hour": 12.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.4945794939994812,
+          0.7180017232894897,
+          0.04893052205443382,
+          0.07814322412014008,
+          0.01821322925388813,
+          0.035815026611089706
+        ],
+        "samples": 226,
+        "positive_windows": 7,
+        "brier": 0.03048316203057766,
+        "baseline_brier": 0.030483165755867958,
+        "brier_skill": 1.2220811740348836e-07,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 7,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 12.0,
+        "end_hour": 24.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.4489349126815796,
+          0.6560510993003845,
+          0.017088977620005608,
+          0.035319212824106216,
+          0.008750888518989086,
+          0.021986810490489006
+        ],
+        "samples": 456,
+        "positive_windows": 4,
+        "brier": 0.00881520938128233,
+        "baseline_brier": 0.00881520938128233,
+        "brier_skill": 0.0,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 4,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 24.0,
+        "end_hour": 32.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.45930013060569763,
+          0.6282007098197937,
+          0.010019121691584587,
+          0.028348408639431,
+          0.008241460658609867,
+          0.024076223373413086
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      }
+    ],
+    "validated_intervals": 376,
+    "checkpoint": "models/lstm/artifacts/experiments/all/model.pt"
+  },
+  {
+    "model": "lstm",
+    "variant": "engineered",
+    "features": 284,
+    "best_epoch": 1,
+    "validation_loss": 0.02225081607039216,
+    "validation_mae": {
+      "0-6h": {
+        "lstm_mae_pfu": 0.02176976576447487,
+        "persistence_mae_pfu": 0.02047186903655529,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.02176976576447487,
+          "persistence_mae_pfu": 0.02047186903655529
+        }
+      },
+      "6-12h": {
+        "lstm_mae_pfu": 0.030211271718144417,
+        "persistence_mae_pfu": 0.02688559703528881,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.030211271718144417,
+          "persistence_mae_pfu": 0.02688559703528881
+        }
+      },
+      "12-24h": {
+        "lstm_mae_pfu": 0.035333216190338135,
+        "persistence_mae_pfu": 0.03097432292997837,
+        "compared_values": 170640,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 170640,
+          "model_mae_pfu": 0.035333216190338135,
+          "persistence_mae_pfu": 0.03097432292997837
+        }
+      },
+      "24-32h": {
+        "lstm_mae_pfu": 0.03809145838022232,
+        "persistence_mae_pfu": 0.033295489847660065,
+        "compared_values": 113760,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 113760,
+          "model_mae_pfu": 0.03809145838022232,
+          "persistence_mae_pfu": 0.033295489847660065
+        }
+      }
+    },
+    "test_mae": {
+      "0-6h": {
+        "lstm_mae_pfu": 0.04898333549499512,
+        "persistence_mae_pfu": 0.04863366484642029,
+        "compared_values": 1356,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1356,
+          "model_mae_pfu": 0.04898333549499512,
+          "persistence_mae_pfu": 0.04863366484642029
+        }
+      },
+      "6-12h": {
+        "lstm_mae_pfu": 0.2393495738506317,
+        "persistence_mae_pfu": 0.24087664484977722,
+        "compared_values": 1356,
+        "event": {
+          "values": 42,
+          "model_mae_pfu": 4.348957538604736,
+          "persistence_mae_pfu": 4.341432094573975
+        },
+        "quiet": {
+          "values": 1314,
+          "model_mae_pfu": 0.10799223184585571,
+          "persistence_mae_pfu": 0.10980865359306335
+        }
+      },
+      "12-24h": {
+        "lstm_mae_pfu": 0.21265491843223572,
+        "persistence_mae_pfu": 0.21471922099590302,
+        "compared_values": 2736,
+        "event": {
+          "values": 24,
+          "model_mae_pfu": 3.357734441757202,
+          "persistence_mae_pfu": 3.35661244392395
+        },
+        "quiet": {
+          "values": 2712,
+          "model_mae_pfu": 0.18482233583927155,
+          "persistence_mae_pfu": 0.18691486120224
+        }
+      },
+      "24-32h": {
+        "lstm_mae_pfu": 0.21564139425754547,
+        "persistence_mae_pfu": 0.21812589466571808,
+        "compared_values": 1824,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1824,
+          "model_mae_pfu": 0.21564139425754547,
+          "persistence_mae_pfu": 0.21812589466571808
+        }
+      }
+    },
+    "probabilities": [
+      {
+        "start_hour": 0.0,
+        "end_hour": 6.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.09695421159267426,
+          0.14148113131523132,
+          0.006653941236436367,
+          0.021534336730837822,
+          0.006695385556668043,
+          0.02058100886642933
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      },
+      {
+        "start_hour": 6.0,
+        "end_hour": 12.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.5260552763938904,
+          0.727782666683197,
+          0.047941435128450394,
+          0.07839244604110718,
+          0.018238291144371033,
+          0.03768736869096756
+        ],
+        "samples": 226,
+        "positive_windows": 7,
+        "brier": 0.03048316389322281,
+        "baseline_brier": 0.030483165755867958,
+        "brier_skill": 6.110405870174418e-08,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 7,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 12.0,
+        "end_hour": 24.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.491741806268692,
+          0.7004519104957581,
+          0.017381004989147186,
+          0.03516513109207153,
+          0.009008604101836681,
+          0.022180918604135513
+        ],
+        "samples": 456,
+        "positive_windows": 4,
+        "brier": 0.00881520938128233,
+        "baseline_brier": 0.00881520938128233,
+        "brier_skill": 0.0,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 4,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 24.0,
+        "end_hour": 32.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.5206276178359985,
+          0.7008814811706543,
+          0.010445766150951385,
+          0.02861008606851101,
+          0.008178812451660633,
+          0.025104599073529243
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      }
+    ],
+    "validated_intervals": 341,
+    "checkpoint": "models/lstm/artifacts/experiments/engineered/model.pt"
+  },
+  {
+    "model": "lstm",
+    "variant": "engineered_slow",
+    "features": 284,
+    "best_epoch": 12,
+    "validation_loss": 0.011510028249981031,
+    "validation_mae": {
+      "0-6h": {
+        "lstm_mae_pfu": 0.021537913009524345,
+        "persistence_mae_pfu": 0.02047186903655529,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.021537913009524345,
+          "persistence_mae_pfu": 0.02047186903655529
+        }
+      },
+      "6-12h": {
+        "lstm_mae_pfu": 0.029484543949365616,
+        "persistence_mae_pfu": 0.02688559703528881,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.029484543949365616,
+          "persistence_mae_pfu": 0.02688559703528881
+        }
+      },
+      "12-24h": {
+        "lstm_mae_pfu": 0.03528318554162979,
+        "persistence_mae_pfu": 0.03097432292997837,
+        "compared_values": 170640,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 170640,
+          "model_mae_pfu": 0.03528318554162979,
+          "persistence_mae_pfu": 0.03097432292997837
+        }
+      },
+      "24-32h": {
+        "lstm_mae_pfu": 0.041620343923568726,
+        "persistence_mae_pfu": 0.033295489847660065,
+        "compared_values": 113760,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 113760,
+          "model_mae_pfu": 0.041620343923568726,
+          "persistence_mae_pfu": 0.033295489847660065
+        }
+      }
+    },
+    "test_mae": {
+      "0-6h": {
+        "lstm_mae_pfu": 0.048217009752988815,
+        "persistence_mae_pfu": 0.04863366484642029,
+        "compared_values": 1356,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1356,
+          "model_mae_pfu": 0.048217009752988815,
+          "persistence_mae_pfu": 0.04863366484642029
+        }
+      },
+      "6-12h": {
+        "lstm_mae_pfu": 0.2345074862241745,
+        "persistence_mae_pfu": 0.24087664484977722,
+        "compared_values": 1356,
+        "event": {
+          "values": 42,
+          "model_mae_pfu": 4.348889350891113,
+          "persistence_mae_pfu": 4.341432094573975
+        },
+        "quiet": {
+          "values": 1314,
+          "model_mae_pfu": 0.10299757122993469,
+          "persistence_mae_pfu": 0.10980865359306335
+        }
+      },
+      "12-24h": {
+        "lstm_mae_pfu": 0.2008492350578308,
+        "persistence_mae_pfu": 0.21471922099590302,
+        "compared_values": 2736,
+        "event": {
+          "values": 24,
+          "model_mae_pfu": 3.366192579269409,
+          "persistence_mae_pfu": 3.35661244392395
+        },
+        "quiet": {
+          "values": 2712,
+          "model_mae_pfu": 0.17283733189105988,
+          "persistence_mae_pfu": 0.18691486120224
+        }
+      },
+      "24-32h": {
+        "lstm_mae_pfu": 0.200179785490036,
+        "persistence_mae_pfu": 0.21812589466571808,
+        "compared_values": 1824,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1824,
+          "model_mae_pfu": 0.200179785490036,
+          "persistence_mae_pfu": 0.21812589466571808
+        }
+      }
+    },
+    "probabilities": [
+      {
+        "start_hour": 0.0,
+        "end_hour": 6.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.09403618425130844,
+          0.1439913958311081,
+          0.006458505988121033,
+          0.018801389262080193,
+          0.006664298940449953,
+          0.019350267946720123
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      },
+      {
+        "start_hour": 6.0,
+        "end_hour": 12.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.5161751508712769,
+          0.7120046019554138,
+          0.04885323345661163,
+          0.07746639847755432,
+          0.017583854496479034,
+          0.03496169298887253
+        ],
+        "samples": 226,
+        "positive_windows": 7,
+        "brier": 0.030483070760965347,
+        "baseline_brier": 0.030483165755867958,
+        "brier_skill": 3.1163069929007747e-06,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 7,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 12.0,
+        "end_hour": 24.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.47075554728507996,
+          0.6523855328559875,
+          0.01812705025076866,
+          0.03429630398750305,
+          0.008166699670255184,
+          0.02136433683335781
+        ],
+        "samples": 456,
+        "positive_windows": 4,
+        "brier": 0.00881520938128233,
+        "baseline_brier": 0.00881520938128233,
+        "brier_skill": 0.0,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 4,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 24.0,
+        "end_hour": 32.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.4941626489162445,
+          0.638168215751648,
+          0.010759945958852768,
+          0.02676907740533352,
+          0.008027845993638039,
+          0.023190967738628387
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      }
+    ],
+    "validated_intervals": 352,
+    "checkpoint": "models/lstm/artifacts/experiments/engineered_slow/model.pt"
+  },
+  {
+    "model": "sepnet",
+    "variant": "all",
+    "features": 172,
+    "best_epoch": 12,
+    "validation_loss": 0.010742517948967998,
+    "validation_mae": {
+      "0-6h": {
+        "sepnet_mae_pfu": 0.02647700160741806,
+        "persistence_mae_pfu": 0.02047186903655529,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.02647700160741806,
+          "persistence_mae_pfu": 0.02047186903655529
+        }
+      },
+      "6-12h": {
+        "sepnet_mae_pfu": 0.036707669496536255,
+        "persistence_mae_pfu": 0.02688559703528881,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.036707669496536255,
+          "persistence_mae_pfu": 0.02688559703528881
+        }
+      },
+      "12-24h": {
+        "sepnet_mae_pfu": 0.04127514362335205,
+        "persistence_mae_pfu": 0.03097432292997837,
+        "compared_values": 170640,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 170640,
+          "model_mae_pfu": 0.04127514362335205,
+          "persistence_mae_pfu": 0.03097432292997837
+        }
+      },
+      "24-32h": {
+        "sepnet_mae_pfu": 0.04543233662843704,
+        "persistence_mae_pfu": 0.033295489847660065,
+        "compared_values": 113760,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 113760,
+          "model_mae_pfu": 0.04543233662843704,
+          "persistence_mae_pfu": 0.033295489847660065
+        }
+      }
+    },
+    "test_mae": {
+      "0-6h": {
+        "sepnet_mae_pfu": 0.05901492014527321,
+        "persistence_mae_pfu": 0.04863366484642029,
+        "compared_values": 1356,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1356,
+          "model_mae_pfu": 0.05901492014527321,
+          "persistence_mae_pfu": 0.04863366484642029
+        }
+      },
+      "6-12h": {
+        "sepnet_mae_pfu": 0.2531161904335022,
+        "persistence_mae_pfu": 0.24087664484977722,
+        "compared_values": 1356,
+        "event": {
+          "values": 42,
+          "model_mae_pfu": 4.337639808654785,
+          "persistence_mae_pfu": 4.341432094573975
+        },
+        "quiet": {
+          "values": 1314,
+          "model_mae_pfu": 0.12256063520908356,
+          "persistence_mae_pfu": 0.10980865359306335
+        }
+      },
+      "12-24h": {
+        "sepnet_mae_pfu": 0.21369554102420807,
+        "persistence_mae_pfu": 0.21471922099590302,
+        "compared_values": 2736,
+        "event": {
+          "values": 24,
+          "model_mae_pfu": 3.35719895362854,
+          "persistence_mae_pfu": 3.35661244392395
+        },
+        "quiet": {
+          "values": 2712,
+          "model_mae_pfu": 0.18587693572044373,
+          "persistence_mae_pfu": 0.18691486120224
+        }
+      },
+      "24-32h": {
+        "sepnet_mae_pfu": 0.20809665322303772,
+        "persistence_mae_pfu": 0.21812589466571808,
+        "compared_values": 1824,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1824,
+          "model_mae_pfu": 0.20809665322303772,
+          "persistence_mae_pfu": 0.21812589466571808
+        }
+      }
+    },
+    "probabilities": [
+      {
+        "start_hour": 0.0,
+        "end_hour": 6.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.10240460932254791,
+          0.1693326085805893,
+          0.022983307018876076,
+          0.02114763669669628,
+          0.016531432047486305,
+          0.021689901128411293
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      },
+      {
+        "start_hour": 6.0,
+        "end_hour": 12.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.5349874496459961,
+          0.7696827054023743,
+          0.06279879063367844,
+          0.08177386224269867,
+          0.028658997267484665,
+          0.040795352309942245
+        ],
+        "samples": 226,
+        "positive_windows": 7,
+        "brier": 0.03048316203057766,
+        "baseline_brier": 0.030483165755867958,
+        "brier_skill": 1.2220811740348836e-07,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 7,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 12.0,
+        "end_hour": 24.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.4821009039878845,
+          0.6952815651893616,
+          0.026735493913292885,
+          0.03627832606434822,
+          0.015104278922080994,
+          0.026672733947634697
+        ],
+        "samples": 456,
+        "positive_windows": 4,
+        "brier": 0.008815208449959755,
+        "baseline_brier": 0.00881520938128233,
+        "brier_skill": 1.0564951258285049e-07,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 4,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 24.0,
+        "end_hour": 32.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.5030894875526428,
+          0.6529886722564697,
+          0.021106822416186333,
+          0.028221657499670982,
+          0.017324062064290047,
+          0.02584921382367611
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      }
+    ],
+    "validated_intervals": 327,
+    "checkpoint": "models/sepnet/artifacts/experiments/all/model.pt"
+  },
+  {
+    "model": "sepnet",
+    "variant": "core",
+    "features": 95,
+    "best_epoch": 6,
+    "validation_loss": 0.012163332175809246,
+    "validation_mae": {
+      "0-6h": {
+        "sepnet_mae_pfu": 0.02560235932469368,
+        "persistence_mae_pfu": 0.02047186903655529,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.02560235932469368,
+          "persistence_mae_pfu": 0.02047186903655529
+        }
+      },
+      "6-12h": {
+        "sepnet_mae_pfu": 0.03344536945223808,
+        "persistence_mae_pfu": 0.02688559703528881,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.03344536945223808,
+          "persistence_mae_pfu": 0.02688559703528881
+        }
+      },
+      "12-24h": {
+        "sepnet_mae_pfu": 0.039123933762311935,
+        "persistence_mae_pfu": 0.03097432292997837,
+        "compared_values": 170640,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 170640,
+          "model_mae_pfu": 0.039123933762311935,
+          "persistence_mae_pfu": 0.03097432292997837
+        }
+      },
+      "24-32h": {
+        "sepnet_mae_pfu": 0.04485282301902771,
+        "persistence_mae_pfu": 0.033295489847660065,
+        "compared_values": 113760,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 113760,
+          "model_mae_pfu": 0.04485282301902771,
+          "persistence_mae_pfu": 0.033295489847660065
+        }
+      }
+    },
+    "test_mae": {
+      "0-6h": {
+        "sepnet_mae_pfu": 0.05512705072760582,
+        "persistence_mae_pfu": 0.04863366484642029,
+        "compared_values": 1356,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1356,
+          "model_mae_pfu": 0.05512705072760582,
+          "persistence_mae_pfu": 0.04863366484642029
+        }
+      },
+      "6-12h": {
+        "sepnet_mae_pfu": 0.2396869957447052,
+        "persistence_mae_pfu": 0.24087664484977722,
+        "compared_values": 1356,
+        "event": {
+          "values": 42,
+          "model_mae_pfu": 4.336245536804199,
+          "persistence_mae_pfu": 4.341432094573975
+        },
+        "quiet": {
+          "values": 1314,
+          "model_mae_pfu": 0.10874676704406738,
+          "persistence_mae_pfu": 0.10980865359306335
+        }
+      },
+      "12-24h": {
+        "sepnet_mae_pfu": 0.20477141439914703,
+        "persistence_mae_pfu": 0.21471922099590302,
+        "compared_values": 2736,
+        "event": {
+          "values": 24,
+          "model_mae_pfu": 3.358278512954712,
+          "persistence_mae_pfu": 3.35661244392395
+        },
+        "quiet": {
+          "values": 2712,
+          "model_mae_pfu": 0.17686426639556885,
+          "persistence_mae_pfu": 0.18691486120224
+        }
+      },
+      "24-32h": {
+        "sepnet_mae_pfu": 0.2029857337474823,
+        "persistence_mae_pfu": 0.21812589466571808,
+        "compared_values": 1824,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1824,
+          "model_mae_pfu": 0.2029857337474823,
+          "persistence_mae_pfu": 0.21812589466571808
+        }
+      }
+    },
+    "probabilities": [
+      {
+        "start_hour": 0.0,
+        "end_hour": 6.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.08954129368066788,
+          0.16788624227046967,
+          0.014926547184586525,
+          0.0222590584307909,
+          0.01344201248139143,
+          0.022707130759954453
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      },
+      {
+        "start_hour": 6.0,
+        "end_hour": 12.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.5073665976524353,
+          0.7320067882537842,
+          0.054217346012592316,
+          0.07982176542282104,
+          0.02532247081398964,
+          0.03938698396086693
+        ],
+        "samples": 226,
+        "positive_windows": 7,
+        "brier": 0.030483156442642212,
+        "baseline_brier": 0.030483165755867958,
+        "brier_skill": 3.055202933976986e-07,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 7,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 12.0,
+        "end_hour": 24.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.46803098917007446,
+          0.6636910438537598,
+          0.02233451046049595,
+          0.0362253338098526,
+          0.01381533220410347,
+          0.024531269446015358
+        ],
+        "samples": 456,
+        "positive_windows": 4,
+        "brier": 0.00881520938128233,
+        "baseline_brier": 0.00881520938128233,
+        "brier_skill": 0.0,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 4,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 24.0,
+        "end_hour": 32.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.5059749484062195,
+          0.6225703954696655,
+          0.016583764925599098,
+          0.030637960880994797,
+          0.015607253648340702,
+          0.02654004655778408
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      }
+    ],
+    "validated_intervals": 340,
+    "checkpoint": "models/sepnet/artifacts/experiments/core/model.pt"
+  },
+  {
+    "model": "sepnet",
+    "variant": "engineered",
+    "features": 284,
+    "best_epoch": 1,
+    "validation_loss": 0.011296978118959107,
+    "validation_mae": {
+      "0-6h": {
+        "sepnet_mae_pfu": 0.026299336925148964,
+        "persistence_mae_pfu": 0.02047186903655529,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.026299336925148964,
+          "persistence_mae_pfu": 0.02047186903655529
+        }
+      },
+      "6-12h": {
+        "sepnet_mae_pfu": 0.0326911136507988,
+        "persistence_mae_pfu": 0.02688559703528881,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.0326911136507988,
+          "persistence_mae_pfu": 0.02688559703528881
+        }
+      },
+      "12-24h": {
+        "sepnet_mae_pfu": 0.03855624049901962,
+        "persistence_mae_pfu": 0.03097432292997837,
+        "compared_values": 170640,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 170640,
+          "model_mae_pfu": 0.03855624049901962,
+          "persistence_mae_pfu": 0.03097432292997837
+        }
+      },
+      "24-32h": {
+        "sepnet_mae_pfu": 0.04491394758224487,
+        "persistence_mae_pfu": 0.033295489847660065,
+        "compared_values": 113760,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 113760,
+          "model_mae_pfu": 0.04491394758224487,
+          "persistence_mae_pfu": 0.033295489847660065
+        }
+      }
+    },
+    "test_mae": {
+      "0-6h": {
+        "sepnet_mae_pfu": 0.05611526966094971,
+        "persistence_mae_pfu": 0.04863366484642029,
+        "compared_values": 1356,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1356,
+          "model_mae_pfu": 0.05611526966094971,
+          "persistence_mae_pfu": 0.04863366484642029
+        }
+      },
+      "6-12h": {
+        "sepnet_mae_pfu": 0.24643875658512115,
+        "persistence_mae_pfu": 0.24087664484977722,
+        "compared_values": 1356,
+        "event": {
+          "values": 42,
+          "model_mae_pfu": 4.346107006072998,
+          "persistence_mae_pfu": 4.341432094573975
+        },
+        "quiet": {
+          "values": 1314,
+          "model_mae_pfu": 0.11539912968873978,
+          "persistence_mae_pfu": 0.10980865359306335
+        }
+      },
+      "12-24h": {
+        "sepnet_mae_pfu": 0.2108561396598816,
+        "persistence_mae_pfu": 0.21471922099590302,
+        "compared_values": 2736,
+        "event": {
+          "values": 24,
+          "model_mae_pfu": 3.3795549869537354,
+          "persistence_mae_pfu": 3.35661244392395
+        },
+        "quiet": {
+          "values": 2712,
+          "model_mae_pfu": 0.1828145533800125,
+          "persistence_mae_pfu": 0.18691486120224
+        }
+      },
+      "24-32h": {
+        "sepnet_mae_pfu": 0.2063639760017395,
+        "persistence_mae_pfu": 0.21812589466571808,
+        "compared_values": 1824,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1824,
+          "model_mae_pfu": 0.2063639760017395,
+          "persistence_mae_pfu": 0.21812589466571808
+        }
+      }
+    },
+    "probabilities": [
+      {
+        "start_hour": 0.0,
+        "end_hour": 6.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.10518120229244232,
+          0.14140133559703827,
+          0.019832639023661613,
+          0.02732952870428562,
+          0.014954837039113045,
+          0.02799207903444767
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      },
+      {
+        "start_hour": 6.0,
+        "end_hour": 12.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.5354999899864197,
+          0.7233710885047913,
+          0.062474578619003296,
+          0.08581684529781342,
+          0.025059949606657028,
+          0.046409983187913895
+        ],
+        "samples": 226,
+        "positive_windows": 7,
+        "brier": 0.03048316389322281,
+        "baseline_brier": 0.030483165755867958,
+        "brier_skill": 6.110405870174418e-08,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 7,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 12.0,
+        "end_hour": 24.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.4926416277885437,
+          0.6517164707183838,
+          0.033368539065122604,
+          0.04252474009990692,
+          0.018350165337324142,
+          0.026535354554653168
+        ],
+        "samples": 456,
+        "positive_windows": 4,
+        "brier": 0.008815212175250053,
+        "baseline_brier": 0.00881520938128233,
+        "brier_skill": -3.169485378595738e-07,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 4,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 24.0,
+        "end_hour": 32.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.5122199654579163,
+          0.6155813932418823,
+          0.027945812791585922,
+          0.0389593169093132,
+          0.01576998084783554,
+          0.027707410976290703
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      }
+    ],
+    "validated_intervals": 350,
+    "checkpoint": "models/sepnet/artifacts/experiments/engineered/model.pt"
+  },
+  {
+    "model": "sepnet",
+    "variant": "engineered_slow",
+    "features": 284,
+    "best_epoch": 4,
+    "validation_loss": 0.009254685448254713,
+    "validation_mae": {
+      "0-6h": {
+        "sepnet_mae_pfu": 0.022787217050790787,
+        "persistence_mae_pfu": 0.02047186903655529,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.022787217050790787,
+          "persistence_mae_pfu": 0.02047186903655529
+        }
+      },
+      "6-12h": {
+        "sepnet_mae_pfu": 0.030725352466106415,
+        "persistence_mae_pfu": 0.02688559703528881,
+        "compared_values": 85320,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 85320,
+          "model_mae_pfu": 0.030725352466106415,
+          "persistence_mae_pfu": 0.02688559703528881
+        }
+      },
+      "12-24h": {
+        "sepnet_mae_pfu": 0.035937223583459854,
+        "persistence_mae_pfu": 0.03097432292997837,
+        "compared_values": 170640,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 170640,
+          "model_mae_pfu": 0.035937223583459854,
+          "persistence_mae_pfu": 0.03097432292997837
+        }
+      },
+      "24-32h": {
+        "sepnet_mae_pfu": 0.03988640755414963,
+        "persistence_mae_pfu": 0.033295489847660065,
+        "compared_values": 113760,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 113760,
+          "model_mae_pfu": 0.03988640755414963,
+          "persistence_mae_pfu": 0.033295489847660065
+        }
+      }
+    },
+    "test_mae": {
+      "0-6h": {
+        "sepnet_mae_pfu": 0.0483677051961422,
+        "persistence_mae_pfu": 0.04863366484642029,
+        "compared_values": 1356,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1356,
+          "model_mae_pfu": 0.0483677051961422,
+          "persistence_mae_pfu": 0.04863366484642029
+        }
+      },
+      "6-12h": {
+        "sepnet_mae_pfu": 0.2330954670906067,
+        "persistence_mae_pfu": 0.24087664484977722,
+        "compared_values": 1356,
+        "event": {
+          "values": 42,
+          "model_mae_pfu": 4.344778537750244,
+          "persistence_mae_pfu": 4.341432094573975
+        },
+        "quiet": {
+          "values": 1314,
+          "model_mae_pfu": 0.10167180001735687,
+          "persistence_mae_pfu": 0.10980865359306335
+        }
+      },
+      "12-24h": {
+        "sepnet_mae_pfu": 0.2036803811788559,
+        "persistence_mae_pfu": 0.21471922099590302,
+        "compared_values": 2736,
+        "event": {
+          "values": 24,
+          "model_mae_pfu": 3.3657970428466797,
+          "persistence_mae_pfu": 3.35661244392395
+        },
+        "quiet": {
+          "values": 2712,
+          "model_mae_pfu": 0.17569705843925476,
+          "persistence_mae_pfu": 0.18691486120224
+        }
+      },
+      "24-32h": {
+        "sepnet_mae_pfu": 0.20224565267562866,
+        "persistence_mae_pfu": 0.21812589466571808,
+        "compared_values": 1824,
+        "event": {
+          "values": 0,
+          "model_mae_pfu": null,
+          "persistence_mae_pfu": null
+        },
+        "quiet": {
+          "values": 1824,
+          "model_mae_pfu": 0.20224565267562866,
+          "persistence_mae_pfu": 0.21812589466571808
+        }
+      }
+    },
+    "probabilities": [
+      {
+        "start_hour": 0.0,
+        "end_hour": 6.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.0977250337600708,
+          0.13701893389225006,
+          0.007486792281270027,
+          0.02070249244570732,
+          0.006585678085684776,
+          0.020687278360128403
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      },
+      {
+        "start_hour": 6.0,
+        "end_hour": 12.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.5105568766593933,
+          0.7060496807098389,
+          0.04829079285264015,
+          0.07903610169887543,
+          0.01845533400774002,
+          0.03618406504392624
+        ],
+        "samples": 226,
+        "positive_windows": 7,
+        "brier": 0.03048316389322281,
+        "baseline_brier": 0.030483165755867958,
+        "brier_skill": 6.110405870174418e-08,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 7,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 12.0,
+        "end_hour": 24.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.470610648393631,
+          0.6640307307243347,
+          0.01843729428946972,
+          0.03755735233426094,
+          0.009132514707744122,
+          0.022313829511404037
+        ],
+        "samples": 456,
+        "positive_windows": 4,
+        "brier": 0.008815208449959755,
+        "baseline_brier": 0.00881520938128233,
+        "brier_skill": 1.0564951258285049e-07,
+        "pod": 0.0,
+        "far": null,
+        "missed_windows": 4,
+        "false_alarm_windows": 0,
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "brier_not_better_than_prevalence"
+      },
+      {
+        "start_hour": 24.0,
+        "end_hour": 32.0,
+        "calibration_origins": 19,
+        "test_origins": 19,
+        "calibration_event_episodes": 3,
+        "test_event_episodes": 1,
+        "mae_pfu": [
+          0.49139952659606934,
+          0.6477740406990051,
+          0.011408758349716663,
+          0.029322931542992592,
+          0.0088213374838233,
+          0.024747246876358986
+        ],
+        "calibrated": true,
+        "probability_valid": false,
+        "reason": "insufficient_test_events_or_samples"
+      }
+    ],
+    "validated_intervals": 352,
+    "checkpoint": "models/sepnet/artifacts/experiments/engineered_slow/model.pt"
+  }
+]
