@@ -1,0 +1,15 @@
+**/.venv/
+**/__pycache__/
+**/*.py[cod]
+**/.DS_Store
+**/.pytest_cache/
+hack/
+data/datasets/
+models/**/output/
+models/**/data/
+models/**/artifacts/smoke/
+**/*_test.py
+**/test_*.py
+**/tests/
+README.md
+LICENSE

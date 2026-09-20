@@ -14,3 +14,32 @@ services:
       retries: 5
       start_period: 20s
     restart: unless-stopped
+
+  sepnet-sgr:
+    build:
+      context: ./ML
+      dockerfile: Dockerfile
+    image: sepnet-sgr:local
+    container_name: sepnet-sgr
+    ports:
+      - "8002:8002"
+    environment:
+      PORT: "8002"
+    volumes:
+      - sepnet-datasets:/app/data/datasets
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  sepnet-datasets:
