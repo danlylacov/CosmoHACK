@@ -24,7 +24,7 @@ WORKDIR /app
 RUN adduser --disabled-password --gecos "" --uid 10001 appuser
 
 COPY --from=builder /opt/venv /opt/venv
-COPY main.py get_data.py build_trajectory.py ./
+COPY *.py ./
 
 USER appuser
 

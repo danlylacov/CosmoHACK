@@ -4,41 +4,19 @@
 Источник: CelesTrak SOCRATES Plus (регистрация не требуется)
 """
 
-import requests
-from bs4 import BeautifulSoup
+from __future__ import annotations
+
 import json
 from datetime import datetime, timezone
 
+import requests
+from bs4 import BeautifulSoup
 
-def fetch_iss_conjunctions(order="TCA", max_records=1000):
-    """
-    Запрашивает сближения МКС с CelesTrak SOCRATES.
 
-    Args:
-        order: TCA | MAXPROB | RELSPEED | MINRANGE
-        max_records: Максимальное число записей
+def parse_socrates_html(html: str) -> list[dict]:
+    """Parse CelesTrak SOCRATES HTML into event dicts (same schema as before)."""
+    soup = BeautifulSoup(html, "html.parser")
 
-    Returns:
-        Список словарей с данными о сближениях.
-    """
-    url = "https://celestrak.org/SOCRATES/table-socrates.php"
-    params = {
-        "CATNR": "25544",       # NORAD ID МКС
-        "ORDER": order,         # Сортировка
-        "MAX": max_records,     # Лимит записей
-    }
-
-    headers = {
-        "User-Agent": "Mozilla/5.0 (compatible; ISS-Conjunction-Fetcher/1.0)"
-    }
-
-    print(f"📡 Запрос к SOCRATES (CATNR=25544, ORDER={order})...")
-    resp = requests.get(url, params=params, headers=headers, timeout=30)
-    resp.raise_for_status()
-
-    soup = BeautifulSoup(resp.text, "html.parser")
-
-    # Ищем таблицу с результатами
     table = None
     for tbl in soup.find_all("table"):
         text = tbl.get_text()
@@ -58,7 +36,6 @@ def fetch_iss_conjunctions(order="TCA", max_records=1000):
         if len(cells) >= 6:
             data_rows.append([c.get_text(strip=True) for c in cells])
 
-    # Каждое сближение описывается двумя строками: основной и вторичный объект
     events = []
     i = 0
     while i < len(data_rows) - 1:
@@ -67,12 +44,10 @@ def fetch_iss_conjunctions(order="TCA", max_records=1000):
         norad_1 = r1[1] if len(r1) > 1 else ""
         norad_2 = r2[1] if len(r2) > 1 else ""
 
-        # NORAD ID должны быть числами
         if not (norad_1.isdigit() and norad_2.isdigit()):
             i += 1
             continue
 
-        # Определяем, какая строка соответствует МКС
         if norad_1 == "25544":
             iss_row, other_row = r1, r2
         elif norad_2 == "25544":
@@ -97,6 +72,34 @@ def fetch_iss_conjunctions(order="TCA", max_records=1000):
     return events
 
 
+def fetch_iss_conjunctions(order="TCA", max_records=1000):
+    """
+    Запрашивает сближения МКС с CelesTrak SOCRATES.
+
+    Args:
+        order: TCA | MAXPROB | RELSPEED | MINRANGE
+        max_records: Максимальное число записей
+
+    Returns:
+        Список словарей с данными о сближениях.
+    """
+    url = "https://celestrak.org/SOCRATES/table-socrates.php"
+    params = {
+        "CATNR": "25544",
+        "ORDER": order,
+        "MAX": max_records,
+    }
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; ISS-Conjunction-Fetcher/1.0)"
+    }
+
+    print(f"📡 Запрос к SOCRATES (CATNR=25544, ORDER={order})...")
+    resp = requests.get(url, params=params, headers=headers, timeout=30)
+    resp.raise_for_status()
+    return parse_socrates_html(resp.text)
+
+
 if __name__ == "__main__":
     events = fetch_iss_conjunctions(order="TCA", max_records=1000)
 
@@ -112,7 +115,6 @@ if __name__ == "__main__":
             f"{e['rel_speed_km_s']:<15} {e['max_probability']}"
         )
 
-    # Сохранение в JSON
     output = {
         "fetched_at": datetime.now(timezone.utc).isoformat(),
         "source": "CelesTrak SOCRATES Plus",
