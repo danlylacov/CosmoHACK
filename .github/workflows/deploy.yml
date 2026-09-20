@@ -32,7 +32,7 @@ jobs:
             timeout 600 docker compose --progress=plain build
 
             echo "Starting application..."
-            timeout 600 docker compose up -d --wait --wait-timeout 60
+            timeout 600 docker compose up -d --wait --wait-timeout 180
 
             echo "Removing unused images..."
             docker image prune -f
